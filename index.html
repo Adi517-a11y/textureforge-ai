@@ -2,29 +2,41 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>TextureForge AI</title>
 <style>
 * {
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 :root {
-    --bg: #f5f7fb;
+    --bg: #f4f5f8;
     --panel: #ffffff;
-    --line: #e2e7ef;
-    --text: #18202c;
-    --muted: #788397;
-    --blue: #5b7cfa;
-    --purple: #8b5cf6;
-    --green: #24b47e;
-    --shadow: 0 10px 30px rgba(30, 45, 70, .08);
+    --panel2: #fafbfc;
+    --line: #e4e7ed;
+    --text: #171b24;
+    --muted: #7d8493;
+    --accent: #6c5ce7;
+    --accent2: #8173f3;
+    --danger: #e05263;
+    --success: #25ad78;
+    --radius: 12px;
 }
+html,
 body {
+    width: 100%;
+    height: 100%;
     margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     overflow: hidden;
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    color: var(--text);
+    background: var(--bg);
 }
 button,
 input,
@@ -34,303 +46,411 @@ select {
 }
 button {
     cursor: pointer;
+    border: 0;
 }
 .app {
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
 }
-/* HEADER */
+/* =========================
+   HEADER
+========================= */
 .header {
-    height: 64px;
-    background: white;
+    height: 62px;
+    flex-shrink: 0;
+    background: var(--panel);
     border-bottom: 1px solid var(--line);
     display: flex;
     align-items: center;
-    padding: 0 18px;
-    gap: 14px;
-    flex-shrink: 0;
+    padding: 0 16px;
+    gap: 12px;
 }
-.brand {
-    font-size: 20px;
-    font-weight: 800;
-    letter-spacing: -.5px;
+.logo {
+    font-size: 19px;
+    font-weight: 850;
+    letter-spacing: -.6px;
 }
-.brand span {
-    color: var(--purple);
+.logo span {
+    color: var(--accent);
 }
-.project {
-    color: var(--muted);
+.project-name {
     font-size: 13px;
-    padding-left: 10px;
+    color: var(--muted);
     border-left: 1px solid var(--line);
+    padding-left: 12px;
 }
 .header-space {
     flex: 1;
 }
-.header-btn {
+.header-button {
+    background: var(--panel);
     border: 1px solid var(--line);
-    background: white;
-    padding: 8px 13px;
+    color: var(--text);
+    padding: 8px 12px;
     border-radius: 9px;
-    font-weight: 600;
+    font-weight: 650;
 }
-.header-btn:hover {
-    background: #f6f7fb;
+.header-button:hover {
+    background: #f5f6f9;
 }
-.play-btn {
+.play-button {
     background: var(--text);
     color: white;
-    border: 0;
-    padding: 9px 17px;
+    padding: 9px 16px;
     border-radius: 9px;
-    font-weight: 700;
+    font-weight: 750;
 }
-/* WORKSPACE */
+/* =========================
+   MAIN
+========================= */
 .workspace {
     flex: 1;
-    display: grid;
-    grid-template-columns: 220px minmax(350px, 1fr) 330px;
     min-height: 0;
+    display: grid;
+    grid-template-columns: 205px minmax(350px, 1fr) 325px;
 }
-/* ASSETS */
-.assets-panel {
-    background: white;
+/* =========================
+   LEFT SIDEBAR
+========================= */
+.sidebar {
+    background: var(--panel);
     border-right: 1px solid var(--line);
     display: flex;
     flex-direction: column;
     min-height: 0;
 }
-.panel-heading {
-    padding: 18px 16px 10px;
-    font-size: 12px;
-    font-weight: 800;
+.sidebar-title {
+    padding: 17px 15px 9px;
+    font-size: 11px;
+    font-weight: 850;
     color: var(--muted);
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 .asset-list {
-    padding: 8px;
-    overflow-y: auto;
     flex: 1;
+    overflow: auto;
+    padding: 7px;
 }
 .asset {
+    padding: 8px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 9px;
-    border-radius: 10px;
+    gap: 9px;
     margin-bottom: 3px;
 }
 .asset:hover {
-    background: #f4f6fa;
+    background: #f5f6f9;
 }
 .asset.selected {
-    background: #eef1ff;
+    background: #efedff;
 }
-.asset-icon {
-    width: 38px;
-    height: 38px;
+.asset-preview {
+    width: 36px;
+    height: 36px;
     border-radius: 9px;
+    background: #f0f1f5;
     border: 1px solid var(--line);
-    background: #f3f5f8;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
 }
-.asset-icon img {
+.asset-preview img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     image-rendering: pixelated;
 }
-.asset-icon span {
-    font-size: 19px;
+.asset-preview span {
+    font-size: 17px;
 }
 .asset-name {
     font-size: 13px;
     font-weight: 650;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .new-asset {
-    margin: 10px;
-    border: 0;
-    background: var(--purple);
-    color: white;
-    border-radius: 9px;
+    margin: 9px;
     padding: 11px;
-    font-weight: 700;
+    border-radius: 9px;
+    color: white;
+    background: var(--accent);
+    font-weight: 750;
 }
-/* EDITOR */
-.editor {
+.new-asset:hover {
+    background: var(--accent2);
+}
+/* =========================
+   CENTER
+========================= */
+.center {
     min-width: 0;
+    min-height: 0;
     display: flex;
     flex-direction: column;
 }
-.editor-tabs {
-    height: 48px;
-    background: white;
+.tabs {
+    height: 47px;
+    flex-shrink: 0;
+    background: var(--panel);
     border-bottom: 1px solid var(--line);
     display: flex;
     align-items: center;
-    gap: 4px;
-    padding: 6px 10px;
+    padding: 5px 9px;
+    gap: 3px;
 }
 .tab {
-    border: 0;
-    background: transparent;
     padding: 8px 13px;
     border-radius: 8px;
+    background: transparent;
     color: var(--muted);
-    font-weight: 650;
+    font-weight: 700;
 }
 .tab.active {
-    background: #f0f2f8;
-    color: var(--text);
+    background: #f0efff;
+    color: var(--accent);
 }
-.editor-content {
+/* =========================
+   PAINT
+========================= */
+.paint {
     flex: 1;
     min-height: 0;
-    position: relative;
-}
-/* PAINT MODE */
-.paint-mode {
-    height: 100%;
     display: flex;
     flex-direction: column;
 }
-.paint-tools {
-    height: 52px;
-    background: white;
+.paint-toolbar {
+    height: 50px;
+    flex-shrink: 0;
+    background: var(--panel);
     border-bottom: 1px solid var(--line);
     display: flex;
     align-items: center;
     gap: 7px;
-    padding: 7px 12px;
+    padding: 6px 10px;
 }
 .tool {
-    width: 38px;
     height: 35px;
+    min-width: 35px;
+    border-radius: 8px;
     border: 1px solid var(--line);
     background: white;
-    border-radius: 8px;
 }
 .tool.active {
-    background: #eef1ff;
-    border-color: #aab7ff;
+    background: #efedff;
+    border-color: #bcb5ff;
+    color: var(--accent);
 }
 .color {
-    width: 40px;
+    width: 39px;
     height: 35px;
-    padding: 3px;
     border: 1px solid var(--line);
     border-radius: 8px;
-    background: white;
+    padding: 2px;
 }
-.brush-size {
-    width: 60px;
+.brush {
+    width: 55px;
+    height: 35px;
     border: 1px solid var(--line);
-    border-radius: 7px;
-    padding: 7px;
+    border-radius: 8px;
+    padding: 6px;
 }
 .paint-area {
     flex: 1;
+    min-height: 0;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     overflow: auto;
     background:
-        linear-gradient(45deg, #edf0f5 25%, transparent 25%),
-        linear-gradient(-45deg, #edf0f5 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, #edf0f5 75%),
-        linear-gradient(-45deg, transparent 75%, #edf0f5 75%);
+        linear-gradient(45deg,#eceef2 25%,transparent 25%),
+        linear-gradient(-45deg,#eceef2 25%,transparent 25%),
+        linear-gradient(45deg,transparent 75%,#eceef2 75%),
+        linear-gradient(-45deg,transparent 75%,#eceef2 75%);
     background-size: 28px 28px;
-    background-position: 0 0, 0 14px, 14px -14px, -14px 0;
+    background-position:
+        0 0,
+        0 14px,
+        14px -14px,
+        -14px 0;
 }
 #paintCanvas {
-    width: min(65vh, 520px);
-    height: min(65vh, 520px);
+    width: min(65vh,520px);
+    height: min(65vh,520px);
     background: white;
-    border: 2px solid #cbd2df;
+    border: 2px solid #cdd2dc;
+    box-shadow: 0 12px 35px rgba(20,25,40,.10);
     image-rendering: pixelated;
     touch-action: none;
-    box-shadow: var(--shadow);
 }
-/* GAME */
-.game-mode {
-    height: 100%;
+/* =========================
+   GAME
+========================= */
+.game {
+    flex: 1;
+    min-height: 0;
     display: none;
     flex-direction: column;
-    background: #20252f;
+    background: #1b2029;
 }
 .game-toolbar {
-    height: 48px;
-    background: #171b23;
-    color: white;
+    height: 47px;
+    flex-shrink: 0;
+    background: #151922;
     display: flex;
     align-items: center;
-    padding: 0 12px;
-    gap: 9px;
+    gap: 7px;
+    padding: 5px 9px;
+    color: white;
 }
 .game-toolbar button {
-    background: #2a303c;
-    border: 1px solid #3b4352;
+    background: #292f3a;
+    border: 1px solid #3b4350;
     color: white;
+    padding: 7px 11px;
     border-radius: 7px;
-    padding: 7px 12px;
 }
 .game-status {
     margin-left: auto;
-    color: #9da7b8;
-    font-size: 12px;
+    color: #9aa4b4;
+    font-size: 11px;
 }
 .game-area {
     flex: 1;
+    min-height: 0;
     display: flex;
-    justify-content: center;
     align-items: center;
-    overflow: auto;
+    justify-content: center;
+    position: relative;
 }
 #gameCanvas {
-    width: min(90%, 900px);
+    width: min(94%,900px);
+    max-height: 90%;
     aspect-ratio: 16 / 9;
-    background: #8ed0ff;
-    image-rendering: auto;
-    border-radius: 8px;
-    box-shadow: 0 15px 50px rgba(0,0,0,.35);
+    border-radius: 9px;
+    background: #9edcff;
+    box-shadow: 0 20px 60px rgba(0,0,0,.35);
 }
-/* INSPECTOR */
-.inspector {
-    background: white;
-    border-left: 1px solid var(--line);
-    display: flex;
-    flex-direction: column;
+/* =========================
+   ANIMATION EDITOR
+========================= */
+.animation {
+    flex: 1;
     min-height: 0;
+    display: none;
+    flex-direction: column;
+    background: #f6f7fa;
 }
-.section {
-    padding: 15px;
-    border-bottom: 1px solid var(--line);
+.animation-preview {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+        linear-gradient(45deg,#e9ebef 25%,transparent 25%),
+        linear-gradient(-45deg,#e9ebef 25%,transparent 25%),
+        linear-gradient(45deg,transparent 75%,#e9ebef 75%),
+        linear-gradient(-45deg,transparent 75%,#e9ebef 75%);
+    background-size: 32px 32px;
+    background-position:
+        0 0,
+        0 16px,
+        16px -16px,
+        -16px 0;
 }
-.section-title {
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: .8px;
-    font-size: 11px;
-    font-weight: 800;
+#animationCanvas {
+    width: min(50vh,420px);
+    height: min(50vh,420px);
+    background: white;
+    border: 1px solid var(--line);
+    image-rendering: pixelated;
+}
+.animation-bottom {
+    height: 150px;
+    background: white;
+    border-top: 1px solid var(--line);
+    padding: 10px;
+    overflow-x: auto;
+}
+.animation-controls {
+    display: flex;
+    align-items: center;
+    gap: 7px;
     margin-bottom: 9px;
 }
-.name-input {
+.animation-controls button,
+.animation-controls select,
+.animation-controls input {
+    height: 31px;
+    border: 1px solid var(--line);
+    background: white;
+    border-radius: 7px;
+    padding: 5px 8px;
+}
+.frames {
+    display: flex;
+    gap: 7px;
+}
+.frame {
+    width: 66px;
+    height: 66px;
+    flex-shrink: 0;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    background: #f3f4f7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.frame.selected {
+    border: 2px solid var(--accent);
+}
+.frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    image-rendering: pixelated;
+}
+/* =========================
+   RIGHT INSPECTOR
+========================= */
+.inspector {
+    background: var(--panel);
+    border-left: 1px solid var(--line);
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+.inspector-section {
+    padding: 14px;
+    border-bottom: 1px solid var(--line);
+}
+.label {
+    color: var(--muted);
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: .9px;
+    font-weight: 850;
+    margin-bottom: 8px;
+}
+.name {
     width: 100%;
     border: 1px solid var(--line);
     border-radius: 8px;
     padding: 9px;
     outline: none;
 }
-.name-input:focus,
-.ai-input:focus {
-    border-color: #9eabff;
+.name:focus {
+    border-color: #aaa1ff;
 }
-.ai-section {
+.ai {
     flex: 1;
     min-height: 0;
     display: flex;
@@ -338,7 +458,7 @@ button {
 }
 .ai-input {
     width: 100%;
-    min-height: 115px;
+    min-height: 120px;
     resize: vertical;
     border: 1px solid var(--line);
     border-radius: 9px;
@@ -346,83 +466,199 @@ button {
     outline: none;
     line-height: 1.45;
 }
-.ai-run {
+.ai-button {
     margin-top: 8px;
-    border: 0;
-    border-radius: 9px;
-    background: linear-gradient(135deg, var(--purple), #6078f8);
-    color: white;
     padding: 11px;
+    border-radius: 9px;
+    color: white;
+    background: linear-gradient(
+        135deg,
+        #725de8,
+        #8b73ef
+    );
     font-weight: 750;
 }
-.ai-result {
-    margin-top: 9px;
-    background: #f6f7fa;
-    border-radius: 8px;
+.ai-output {
+    margin-top: 8px;
     padding: 10px;
-    color: #657084;
+    border-radius: 8px;
+    background: #f6f7fa;
+    color: #697386;
     font-size: 11px;
     line-height: 1.5;
-    max-height: 160px;
+    max-height: 145px;
     overflow: auto;
 }
 .rules {
     max-height: 190px;
-    overflow-y: auto;
+    overflow: auto;
 }
 .rule {
-    background: #f7f8fb;
+    padding: 8px;
+    background: #f7f8fa;
     border: 1px solid var(--line);
-    padding: 9px;
     border-radius: 8px;
     margin-bottom: 6px;
     font-size: 11px;
 }
-.rule-top {
+.rule-header {
     display: flex;
     justify-content: space-between;
     font-weight: 750;
 }
 .rule-action {
-    color: var(--purple);
+    color: var(--accent);
 }
 .delete-rule {
-    border: 0;
     background: transparent;
-    color: #d35b68;
+    color: var(--danger);
 }
-/* STATUS */
-.statusbar {
-    height: 28px;
+/* =========================
+   MOBILE CONTROLS
+========================= */
+.mobile-controls {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    display: none;
+}
+.joystick {
+    position: absolute;
+    left: 25px;
+    bottom: 25px;
+    width: 125px;
+    height: 125px;
+    border-radius: 50%;
+    background: rgba(20,25,35,.28);
+    border: 2px solid rgba(255,255,255,.35);
+    pointer-events: auto;
+    touch-action: none;
+}
+.joystick-knob {
+    position: absolute;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.75);
+    left: 33px;
+    top: 33px;
+    box-shadow: 0 4px 15px rgba(0,0,0,.2);
+}
+.action-buttons {
+    position: absolute;
+    right: 25px;
+    bottom: 25px;
+    display: flex;
+    gap: 13px;
+    pointer-events: auto;
+}
+.action-button {
+    width: 66px;
+    height: 66px;
+    border-radius: 50%;
+    color: white;
+    background: rgba(25,30,40,.5);
+    border: 2px solid rgba(255,255,255,.4);
+    font-weight: 800;
+    touch-action: none;
+}
+.action-button:active {
+    transform: scale(.94);
+    background: rgba(108,92,231,.75);
+}
+/* =========================
+   STATUS
+========================= */
+.status {
+    height: 27px;
+    flex-shrink: 0;
     background: white;
     border-top: 1px solid var(--line);
     display: flex;
     align-items: center;
+    padding: 0 11px;
     gap: 18px;
-    padding: 0 12px;
     color: var(--muted);
     font-size: 10px;
 }
-.status-online {
-    color: var(--green);
+.ready {
+    color: var(--success);
 }
-/* MOBILE */
-@media(max-width: 900px) {
+/* =========================
+   TABLET / IPAD
+========================= */
+@media(max-width:1050px) {
     .workspace {
-        grid-template-columns: 170px minmax(300px, 1fr) 280px;
+        grid-template-columns:
+            175px
+            minmax(300px,1fr)
+            285px;
+    }
+    .header-button {
+        display: none;
     }
 }
-@media(max-width: 700px) {
+/* =========================
+   PHONE
+========================= */
+@media(max-width:700px) {
+    .header {
+        height: 55px;
+        padding: 0 10px;
+    }
+    .logo {
+        font-size: 16px;
+    }
+    .project-name {
+        display: none;
+    }
     .workspace {
         grid-template-columns: 1fr;
     }
-    .assets-panel,
+    .sidebar,
     .inspector {
         display: none;
+    }
+    .mobile-controls {
+        display: block;
+    }
+    .paint-toolbar {
+        overflow-x: auto;
     }
     #paintCanvas {
         width: 82vw;
         height: 82vw;
+    }
+    #gameCanvas {
+        width: 96%;
+    }
+    .play-button {
+        padding: 8px 12px;
+    }
+}
+/* =========================
+   IPAD PORTRAIT
+========================= */
+@media(
+    min-width:701px
+) and (
+    max-width:900px
+) {
+    .workspace {
+        grid-template-columns:
+            180px
+            1fr;
+    }
+    .inspector {
+        position: absolute;
+        right: 10px;
+        bottom: 38px;
+        width: 300px;
+        max-height: 65%;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        box-shadow: 0 15px 40px rgba(0,0,0,.12);
+        z-index: 20;
     }
 }
 </style>
@@ -430,163 +666,274 @@ button {
 <body>
 <div class="app">
 <header class="header">
-    <div class="brand">
+    <div class="logo">
         Texture<span>Forge</span> AI
     </div>
-    <div class="project">
+    <div class="project-name">
         Untitled Game
     </div>
     <div class="header-space"></div>
-    <button class="header-btn" onclick="saveProject()">
+    <button class="header-button"
+            onclick="saveProject()">
         Save
     </button>
-    <button class="header-btn" onclick="exportProject()">
+    <button class="header-button"
+            onclick="exportProject()">
         Export
     </button>
-    <button class="play-btn" onclick="toggleGame()">
+    <button class="play-button"
+            onclick="toggleGame()">
         ▶ Play
     </button>
 </header>
 <div class="workspace">
-<!-- =====================================================
+<!-- =========================
      ASSETS
-===================================================== -->
-<aside class="assets-panel">
-    <div class="panel-heading">
+========================= -->
+<aside class="sidebar">
+    <div class="sidebar-title">
         Assets
     </div>
-    <div id="assetList" class="asset-list"></div>
-    <button class="new-asset" onclick="createAsset()">
-        + Create Asset
+    <div
+        id="assetList"
+        class="asset-list">
+    </div>
+    <button
+        class="new-asset"
+        onclick="createAsset()">
+        + New Asset
     </button>
 </aside>
-<!-- =====================================================
-     EDITOR
-===================================================== -->
-<main class="editor">
-    <div class="editor-tabs">
+<!-- =========================
+     CENTER
+========================= -->
+<main class="center">
+    <div class="tabs">
         <button
             id="paintTab"
             class="tab active"
-            onclick="showPaint()">
+            onclick="showMode('paint')">
             Paint
+        </button>
+        <button
+            id="animationTab"
+            class="tab"
+            onclick="showMode('animation')">
+            Animation
         </button>
         <button
             id="gameTab"
             class="tab"
-            onclick="showGame()">
-            Game Preview
+            onclick="showMode('game')">
+            Game
         </button>
     </div>
-    <div class="editor-content">
-        <!-- PAINT -->
-        <div id="paintMode" class="paint-mode">
-            <div class="paint-tools">
-                <button
-                    class="tool active"
-                    onclick="setTool('pencil')">
-                    ✎
+    <!-- PAINT -->
+    <section
+        id="paintMode"
+        class="paint">
+        <div class="paint-toolbar">
+            <button
+                class="tool active"
+                onclick="setTool('pencil')">
+                ✎
+            </button>
+            <button
+                class="tool"
+                onclick="setTool('eraser')">
+                ⌫
+            </button>
+            <button
+                class="tool"
+                onclick="clearPaint()">
+                Clear
+            </button>
+            <input
+                id="color"
+                class="color"
+                type="color"
+                value="#222222">
+            <input
+                id="brush"
+                class="brush"
+                type="number"
+                min="1"
+                max="80"
+                value="10">
+        </div>
+        <div class="paint-area">
+            <canvas
+                id="paintCanvas"
+                width="512"
+                height="512">
+            </canvas>
+        </div>
+    </section>
+    <!-- ANIMATION -->
+    <section
+        id="animationMode"
+        class="animation">
+        <div class="animation-preview">
+            <canvas
+                id="animationCanvas"
+                width="512"
+                height="512">
+            </canvas>
+        </div>
+        <div class="animation-bottom">
+            <div class="animation-controls">
+                <button onclick="addFrame()">
+                    + Frame
                 </button>
-                <button
-                    class="tool"
-                    onclick="setTool('eraser')">
-                    ⌫
+                <button onclick="deleteFrame()">
+                    Delete
                 </button>
-                <button
-                    class="tool"
-                    onclick="clearCanvas()">
-                    Clear
+                <button onclick="playAnimation()">
+                    ▶ Preview
                 </button>
+                <select id="animationSelect"
+                        onchange="changeAnimation()">
+                    <option value="Idle">
+                        Idle
+                    </option>
+                    <option value="Walk">
+                        Walk
+                    </option>
+                    <option value="Run">
+                        Run
+                    </option>
+                    <option value="Jump">
+                        Jump
+                    </option>
+                    <option value="Fall">
+                        Fall
+                    </option>
+                    <option value="Attack">
+                        Attack
+                    </option>
+                    <option value="Hurt">
+                        Hurt
+                    </option>
+                    <option value="Death">
+                        Death
+                    </option>
+                    <option value="Custom">
+                        Custom
+                    </option>
+                </select>
                 <input
-                    id="colorPicker"
-                    class="color"
-                    type="color"
-                    value="#222222">
-                <input
-                    id="brushSize"
-                    class="brush-size"
+                    id="fps"
                     type="number"
                     min="1"
-                    max="80"
-                    value="10">
+                    max="60"
+                    value="8"
+                    title="Frames per second">
             </div>
-            <div class="paint-area">
-                <canvas
-                    id="paintCanvas"
-                    width="512"
-                    height="512">
-                </canvas>
+            <div
+                id="frames"
+                class="frames">
             </div>
         </div>
-        <!-- GAME -->
-        <div id="gameMode" class="game-mode">
-            <div class="game-toolbar">
-                <button onclick="startGame()">
-                    ▶ Start
-                </button>
-                <button onclick="stopGame()">
-                    ■ Stop
-                </button>
-                <button onclick="resetGame()">
-                    ↻ Reset
-                </button>
-                <div class="game-status" id="gameStatus">
-                    Game stopped
+    </section>
+    <!-- GAME -->
+    <section
+        id="gameMode"
+        class="game">
+        <div class="game-toolbar">
+            <button onclick="startGame()">
+                ▶ Start
+            </button>
+            <button onclick="stopGame()">
+                ■ Stop
+            </button>
+            <button onclick="resetGame()">
+                ↻ Reset
+            </button>
+            <div
+                id="gameStatus"
+                class="game-status">
+                Game stopped
+            </div>
+        </div>
+        <div class="game-area">
+            <canvas
+                id="gameCanvas"
+                width="900"
+                height="506">
+            </canvas>
+            <!-- TOUCH CONTROLS -->
+            <div
+                id="mobileControls"
+                class="mobile-controls">
+                <div
+                    id="joystick"
+                    class="joystick">
+                    <div
+                        id="joystickKnob"
+                        class="joystick-knob">
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button
+                        id="jumpButton"
+                        class="action-button">
+                        JUMP
+                    </button>
+                    <button
+                        id="actionButton"
+                        class="action-button">
+                        A
+                    </button>
                 </div>
             </div>
-            <div class="game-area">
-                <canvas
-                    id="gameCanvas"
-                    width="900"
-                    height="506">
-                </canvas>
-            </div>
         </div>
-    </div>
+    </section>
 </main>
-<!-- =====================================================
+<!-- =========================
      INSPECTOR
-===================================================== -->
+========================= -->
 <aside class="inspector">
-    <div class="section">
-        <div class="section-title">
+    <div class="inspector-section">
+        <div class="label">
             Selected Asset
         </div>
         <input
             id="assetName"
-            class="name-input"
+            class="name"
             value="Penguin"
             oninput="renameAsset()">
     </div>
-    <div class="section ai-section">
-        <div class="section-title">
+    <div class="inspector-section ai">
+        <div class="label">
             AI Behavior
         </div>
         <textarea
             id="aiInput"
             class="ai-input"
-            placeholder="Tell the AI what the object should do.
+            placeholder="Tell the AI what your object should do.
 Examples:
 Penguin jump if player is close
 Penguin follow player
 Penguin patrol left and right
+Penguin play Walk animation while moving
+Penguin play Idle animation when stopped
 Penguin disappear when player touches Penguin
-Penguin chase player if player is nearby
-Penguin lose 10 health when player attacks"></textarea>
+Penguin lose 10 health when attacked
+Penguin run away if player gets very close"></textarea>
         <button
-            class="ai-run"
+            class="ai-button"
             onclick="runAI()">
             ✦ Make Behavior Work
         </button>
         <div
-            id="aiResult"
-            class="ai-result">
-            AI behavior engine ready.
+            id="aiOutput"
+            class="ai-output">
+            Behavior compiler ready.
         </div>
     </div>
-    <div class="section">
-        <div class="section-title">
-            Behaviors
+    <div class="inspector-section">
+        <div class="label">
+            Active Behaviors
         </div>
         <div
             id="ruleList"
@@ -595,72 +942,79 @@ Penguin lose 10 health when player attacks"></textarea>
     </div>
 </aside>
 </div>
-<div class="statusbar">
+<div class="status">
     <span>
-        TextureForge AI 0.2.0
+        TextureForge AI 0.3.0
     </span>
-    <span id="status">
+    <span id="statusText">
         Ready
     </span>
-    <span class="status-online">
+    <span class="ready">
         ● Engine Ready
     </span>
 </div>
 </div>
 <script>
 /* =========================================================
-   PROJECT DATA
+   DATA
 ========================================================= */
 let assets = [];
 let selectedAsset = 0;
 let currentTool = "pencil";
-let drawing = false;
+let currentMode = "paint";
 let gameRunning = false;
 let gameObjects = [];
 let lastTime = 0;
+let particles = [];
+let animationPlaying = false;
 /* =========================================================
-   CANVAS PAINTER
+   PAINT
 ========================================================= */
 const paintCanvas =
     document.getElementById("paintCanvas");
 const paintCtx =
     paintCanvas.getContext("2d");
-function blankTexture() {
-    paintCtx.fillStyle = "#ffffff";
+function blankPaint() {
+    paintCtx.globalCompositeOperation =
+        "source-over";
+    paintCtx.fillStyle =
+        "white";
     paintCtx.fillRect(
         0,
         0,
-        paintCanvas.width,
-        paintCanvas.height
+        512,
+        512
     );
 }
-function getPaintPosition(e) {
+function paintPosition(e) {
     const rect =
         paintCanvas.getBoundingClientRect();
     return {
         x:
-            (e.clientX - rect.left) *
-            paintCanvas.width /
-            rect.width,
+            (e.clientX - rect.left)
+            * 512 / rect.width,
         y:
-            (e.clientY - rect.top) *
-            paintCanvas.height /
-            rect.height
+            (e.clientY - rect.top)
+            * 512 / rect.height
     };
 }
-function paint(e) {
+function drawPaint(e) {
     if (!drawing) return;
     const p =
-        getPaintPosition(e);
+        paintPosition(e);
     const size =
         Number(
             document.getElementById(
-                "brushSize"
+                "brush"
             ).value
         );
-    paintCtx.lineWidth = size;
-    paintCtx.lineCap = "round";
-    if (currentTool === "eraser") {
+    paintCtx.lineWidth =
+        size;
+    paintCtx.lineCap =
+        "round";
+    if (
+        currentTool === "eraser"
+    ) {
         paintCtx.globalCompositeOperation =
             "destination-out";
     } else {
@@ -668,31 +1022,38 @@ function paint(e) {
             "source-over";
         paintCtx.strokeStyle =
             document.getElementById(
-                "colorPicker"
+                "color"
             ).value;
     }
-    paintCtx.lineTo(p.x, p.y);
+    paintCtx.lineTo(
+        p.x,
+        p.y
+    );
     paintCtx.stroke();
     paintCtx.beginPath();
-    paintCtx.moveTo(p.x, p.y);
+    paintCtx.moveTo(
+        p.x,
+        p.y
+    );
 }
+let drawing = false;
 paintCanvas.addEventListener(
     "pointerdown",
     e => {
         drawing = true;
         const p =
-            getPaintPosition(e);
+            paintPosition(e);
         paintCtx.beginPath();
         paintCtx.moveTo(
             p.x,
             p.y
         );
-        paint(e);
+        drawPaint(e);
     }
 );
 paintCanvas.addEventListener(
     "pointermove",
-    paint
+    drawPaint
 );
 paintCanvas.addEventListener(
     "pointerup",
@@ -705,30 +1066,31 @@ paintCanvas.addEventListener(
 function finishPaint() {
     drawing = false;
     paintCtx.beginPath();
-    saveCurrentTexture();
+    saveTexture();
 }
-function saveCurrentTexture() {
-    if (!assets[selectedAsset]) return;
+function saveTexture() {
+    if (!assets[selectedAsset])
+        return;
     assets[selectedAsset].texture =
         paintCanvas.toDataURL(
             "image/png"
         );
     renderAssets();
 }
-function clearCanvas() {
-    blankTexture();
-    saveCurrentTexture();
+function clearPaint() {
+    blankPaint();
+    saveTexture();
 }
 function setTool(tool) {
     currentTool = tool;
 }
 /* =========================================================
-   ASSET SYSTEM
+   ASSETS
 ========================================================= */
 function cleanName(name) {
     return name
         .trim()
-        .replace(/\s+/g, "_")
+        .replace(/\s+/g,"_")
         .replace(
             /[^a-zA-Z0-9_]/g,
             ""
@@ -737,36 +1099,53 @@ function cleanName(name) {
 function createAsset() {
     const name =
         prompt(
-            "Name your new asset:",
+            "Name the asset:",
             "Penguin"
         );
-    if (!name) return;
+    if (!name)
+        return;
     assets.push({
         name:
             cleanName(name),
         texture:
             null,
+        animations:
+            createDefaultAnimations(),
         rules: [],
         properties: {
             health: 100,
             speed: 2,
-            jumpPower: 8,
-            gravity: true,
-            solid: true
+            jumpPower: 9
         }
     });
     selectedAsset =
         assets.length - 1;
-    blankTexture();
+    blankPaint();
     renderAssets();
     renderRules();
+    renderFrames();
+    updateAnimationPreview();
     setStatus(
         "Created " +
         assets[selectedAsset].name
     );
 }
+function createDefaultAnimations() {
+    return {
+        Idle: [],
+        Walk: [],
+        Run: [],
+        Jump: [],
+        Fall: [],
+        Attack: [],
+        Hurt: [],
+        Death: [],
+        Custom: []
+    };
+}
 function renameAsset() {
-    if (!assets[selectedAsset]) return;
+    if (!assets[selectedAsset])
+        return;
     assets[selectedAsset].name =
         cleanName(
             document.getElementById(
@@ -776,11 +1155,14 @@ function renameAsset() {
     renderAssets();
 }
 function selectAsset(index) {
-    saveCurrentTexture();
-    selectedAsset = index;
+    saveTexture();
+    selectedAsset =
+        index;
     loadTexture();
     renderAssets();
     renderRules();
+    renderFrames();
+    updateAnimationPreview();
 }
 function renderAssets() {
     const list =
@@ -789,24 +1171,25 @@ function renderAssets() {
         );
     list.innerHTML = "";
     assets.forEach(
-        (asset, index) => {
-            const item =
+        (asset,index) => {
+            const div =
                 document.createElement(
                     "div"
                 );
-            item.className =
+            div.className =
                 "asset" +
                 (
-                    index === selectedAsset
+                    index ===
+                    selectedAsset
                     ? " selected"
                     : ""
                 );
-            const icon =
+            const preview =
                 document.createElement(
                     "div"
                 );
-            icon.className =
-                "asset-icon";
+            preview.className =
+                "asset-preview";
             if (asset.texture) {
                 const img =
                     document.createElement(
@@ -814,14 +1197,19 @@ function renderAssets() {
                     );
                 img.src =
                     asset.texture;
-                icon.appendChild(img);
+                preview.appendChild(
+                    img
+                );
             } else {
-                const emoji =
+                const span =
                     document.createElement(
                         "span"
                     );
-                emoji.textContent = "◆";
-                icon.appendChild(emoji);
+                span.textContent =
+                    "◆";
+                preview.appendChild(
+                    span
+                );
             }
             const name =
                 document.createElement(
@@ -831,24 +1219,32 @@ function renderAssets() {
                 "asset-name";
             name.textContent =
                 asset.name;
-            item.appendChild(icon);
-            item.appendChild(name);
-            item.onclick =
+            div.appendChild(
+                preview
+            );
+            div.appendChild(
+                name
+            );
+            div.onclick =
                 () => selectAsset(index);
-            list.appendChild(item);
+            list.appendChild(
+                div
+            );
         }
     );
 }
 function loadTexture() {
-    blankTexture();
-    if (!assets[selectedAsset]) return;
+    blankPaint();
+    const asset =
+        assets[selectedAsset];
+    if (!asset)
+        return;
     document.getElementById(
         "assetName"
     ).value =
-        assets[selectedAsset].name;
-    const texture =
-        assets[selectedAsset].texture;
-    if (!texture) return;
+        asset.name;
+    if (!asset.texture)
+        return;
     const image =
         new Image();
     image.onload = () => {
@@ -864,72 +1260,263 @@ function loadTexture() {
             0
         );
     };
-    image.src = texture;
+    image.src =
+        asset.texture;
 }
 /* =========================================================
-   AI RULE ENGINE
+   ANIMATION EDITOR
+========================================================= */
+let selectedAnimation =
+    "Idle";
+let selectedFrame = 0;
+function changeAnimation() {
+    selectedAnimation =
+        document.getElementById(
+            "animationSelect"
+        ).value;
+    selectedFrame = 0;
+    renderFrames();
+    updateAnimationPreview();
+}
+function addFrame() {
+    const asset =
+        assets[selectedAsset];
+    if (!asset)
+        return;
+    saveTexture();
+    asset.animations[
+        selectedAnimation
+    ].push(
+        asset.texture
+    );
+    selectedFrame =
+        asset.animations[
+            selectedAnimation
+        ].length - 1;
+    renderFrames();
+    updateAnimationPreview();
+    saveProject();
+}
+function deleteFrame() {
+    const frames =
+        assets[selectedAsset]
+            .animations[
+                selectedAnimation
+            ];
+    if (!frames.length)
+        return;
+    frames.splice(
+        selectedFrame,
+        1
+    );
+    selectedFrame =
+        Math.max(
+            0,
+            selectedFrame - 1
+        );
+    renderFrames();
+    updateAnimationPreview();
+}
+function renderFrames() {
+    const container =
+        document.getElementById(
+            "frames"
+        );
+    container.innerHTML = "";
+    const frames =
+        assets[selectedAsset]
+            ?.animations[
+                selectedAnimation
+            ] || [];
+    frames.forEach(
+        (src,index) => {
+            const frame =
+                document.createElement(
+                    "div"
+                );
+            frame.className =
+                "frame" +
+                (
+                    index ===
+                    selectedFrame
+                    ? " selected"
+                    : ""
+                );
+            if (src) {
+                const img =
+                    document.createElement(
+                        "img"
+                    );
+                img.src = src;
+                frame.appendChild(
+                    img
+                );
+            }
+            frame.onclick = () => {
+                selectedFrame =
+                    index;
+                updateAnimationPreview();
+                renderFrames();
+            };
+            container.appendChild(
+                frame
+            );
+        }
+    );
+}
+function updateAnimationPreview() {
+    const canvas =
+        document.getElementById(
+            "animationCanvas"
+        );
+    const ctx =
+        canvas.getContext("2d");
+    ctx.clearRect(
+        0,
+        0,
+        512,
+        512
+    );
+    const frames =
+        assets[selectedAsset]
+            ?.animations[
+                selectedAnimation
+            ] || [];
+    const src =
+        frames[selectedFrame] ||
+        assets[selectedAsset]?.texture;
+    if (!src)
+        return;
+    const image =
+        new Image();
+    image.onload = () => {
+        ctx.imageSmoothingEnabled =
+            false;
+        ctx.drawImage(
+            image,
+            0,
+            0,
+            512,
+            512
+        );
+    };
+    image.src =
+        src;
+}
+function playAnimation() {
+    const frames =
+        assets[selectedAsset]
+            ?.animations[
+                selectedAnimation
+            ] || [];
+    if (!frames.length) {
+        setStatus(
+            "Add animation frames first"
+        );
+        return;
+    }
+    animationPlaying = true;
+    let frame = 0;
+    const fps =
+        Number(
+            document.getElementById(
+                "fps"
+            ).value
+        ) || 8;
+    const interval =
+        1000 / fps;
+    const timer =
+        setInterval(
+            () => {
+                if (!animationPlaying) {
+                    clearInterval(timer);
+                    return;
+                }
+                selectedFrame =
+                    frame %
+                    frames.length;
+                updateAnimationPreview();
+                renderFrames();
+                frame++;
+            },
+            interval
+        );
+    setTimeout(
+        () => {
+            animationPlaying =
+                false;
+        },
+        Math.max(
+            2000,
+            frames.length *
+            interval *
+            3
+        )
+    );
+}
+/* =========================================================
+   AI COMPILER
 ========================================================= */
 function runAI() {
     const text =
         document.getElementById(
             "aiInput"
         ).value.trim();
-    if (!text) return;
+    if (!text)
+        return;
     const result =
-        understand(text);
+        compileBehavior(text);
     if (!result) {
         showAI(
-            "I don't know that behavior yet.\n\n" +
-            "Try:\n" +
-            "Penguin jump if player is close\n" +
-            "Penguin follow player\n" +
-            "Penguin patrol\n" +
-            "Penguin disappear when player touches Penguin\n" +
-            "Penguin move left\n" +
-            "Penguin move right\n" +
-            "Penguin bounce"
+            "I couldn't compile that behavior yet.\n\n" +
+            "Try combining an object, condition and action."
         );
         return;
     }
     const asset =
-        findAsset(result.target);
+        findAsset(
+            result.target
+        );
     if (!asset) {
         showAI(
-            "I couldn't find an asset named " +
+            "The object '" +
             result.target +
-            ". Create or rename an asset first."
+            "' doesn't exist."
         );
         return;
     }
-    asset.rules.push(result);
+    asset.rules.push(
+        result
+    );
     renderRules();
     saveProject();
     showAI(
-        "✓ Behavior created\n\n" +
+        "✓ Behavior compiled\n\n" +
         "Object: " +
         result.target +
         "\n" +
-        "Trigger: " +
+        "Condition: " +
         result.trigger +
         "\n" +
         "Action: " +
         result.action +
         "\n\n" +
-        "Generated runtime logic:\n" +
         result.code
     );
 }
 function findAsset(name) {
     return assets.find(
-        a =>
-            a.name.toLowerCase() ===
+        asset =>
+            asset.name.toLowerCase() ===
             name.toLowerCase()
     );
 }
 function detectTarget(text) {
     const lower =
         text.toLowerCase();
-    for (const asset of assets) {
+    for (
+        const asset of assets
+    ) {
         if (
             lower.includes(
                 asset.name.toLowerCase()
@@ -938,43 +1525,45 @@ function detectTarget(text) {
             return asset.name;
         }
     }
-    return assets[selectedAsset]
-        ?.name || "Player";
+    return assets[
+        selectedAsset
+    ]?.name || "Player";
 }
-function understand(text) {
+/* =========================================================
+   BEHAVIOR LANGUAGE
+========================================================= */
+function compileBehavior(text) {
     const lower =
         text.toLowerCase();
     const target =
         detectTarget(text);
-    /* JUMP NEAR PLAYER */
+    /* JUMP */
     if (
         lower.includes("jump") &&
         (
             lower.includes("close") ||
-            lower.includes("near") ||
-            lower.includes("nearby")
+            lower.includes("near")
         )
     ) {
         return {
             target,
             trigger:
-                "player is nearby",
+                "player is near",
             action:
                 "jump",
+            type:
+                "jumpNear",
             code:
 `if (distance(${target}, player) < 150) {
     ${target}.jump();
-}`,
-            type:
-                "jumpNear"
+}`
         };
     }
     /* FOLLOW */
     if (
         lower.includes("follow") ||
-        lower.includes("follow player") ||
-        lower.includes("move toward player") ||
-        lower.includes("move towards player")
+        lower.includes("move toward") ||
+        lower.includes("move towards")
     ) {
         return {
             target,
@@ -982,18 +1571,37 @@ function understand(text) {
                 "player is nearby",
             action:
                 "follow player",
+            type:
+                "follow",
             code:
 `if (distance(${target}, player) < 350) {
     ${target}.moveToward(player);
-}`,
+}`
+        };
+    }
+    /* RUN AWAY */
+    if (
+        lower.includes("run away") ||
+        lower.includes("flee") ||
+        lower.includes("escape")
+    ) {
+        return {
+            target,
+            trigger:
+                "player is very close",
+            action:
+                "run away from player",
             type:
-                "follow"
+                "flee",
+            code:
+`if (distance(${target}, player) < 180) {
+    ${target}.runAwayFrom(player);
+}`
         };
     }
     /* CHASE */
     if (
-        lower.includes("chase") &&
-        lower.includes("player")
+        lower.includes("chase")
     ) {
         return {
             target,
@@ -1001,19 +1609,17 @@ function understand(text) {
                 "player detected",
             action:
                 "chase player",
-            code:
-`if (distance(${target}, player) < 300) {
-    ${target}.chase(player);
-}`,
             type:
-                "chase"
+                "chase",
+            code:
+`if (distance(${target}, player) < 350) {
+    ${target}.chase(player);
+}`
         };
     }
     /* PATROL */
     if (
-        lower.includes("patrol") ||
-        lower.includes("walk left and right") ||
-        lower.includes("move left and right")
+        lower.includes("patrol")
     ) {
         return {
             target,
@@ -1021,50 +1627,81 @@ function understand(text) {
                 "always",
             action:
                 "patrol",
+            type:
+                "patrol",
             code:
 `everyFrame(() => {
     ${target}.patrol();
-});`,
-            type:
-                "patrol"
+});`
         };
     }
-    /* MOVE LEFT */
+    /* ANIMATION WHILE MOVING */
     if (
-        lower.includes("move left") ||
-        lower.includes("go left")
+        (
+            lower.includes("play walk") ||
+            lower.includes("play walking") ||
+            lower.includes("walk animation")
+        ) &&
+        lower.includes("moving")
     ) {
         return {
             target,
             trigger:
-                "always",
+                "object is moving",
             action:
-                "move left",
-            code:
-`everyFrame(() => {
-    ${target}.velocityX = -2;
-});`,
+                "play Walk animation",
             type:
-                "left"
+                "animationMoving",
+            animation:
+                "Walk",
+            code:
+`if (${target}.velocityX !== 0) {
+    ${target}.playAnimation("Walk");
+}`
         };
     }
-    /* MOVE RIGHT */
+    /* IDLE ANIMATION */
     if (
-        lower.includes("move right") ||
-        lower.includes("go right")
+        lower.includes("idle") &&
+        (
+            lower.includes("stopped") ||
+            lower.includes("not moving")
+        )
     ) {
         return {
             target,
             trigger:
-                "always",
+                "object is not moving",
             action:
-                "move right",
-            code:
-`everyFrame(() => {
-    ${target}.velocityX = 2;
-});`,
+                "play Idle animation",
             type:
-                "right"
+                "animationIdle",
+            animation:
+                "Idle",
+            code:
+`if (${target}.velocityX === 0) {
+    ${target}.playAnimation("Idle");
+}`
+        };
+    }
+    /* JUMP ANIMATION */
+    if (
+        lower.includes("jump animation")
+    ) {
+        return {
+            target,
+            trigger:
+                "object is jumping",
+            action:
+                "play Jump animation",
+            type:
+                "animationJump",
+            animation:
+                "Jump",
+            code:
+`if (${target}.velocityY < 0) {
+    ${target}.playAnimation("Jump");
+}`
         };
     }
     /* DISAPPEAR */
@@ -1081,89 +1718,15 @@ function understand(text) {
                 "player touches object",
             action:
                 "disappear",
+            type:
+                "destroyTouch",
             code:
 `if (${target}.touching(player)) {
     ${target}.destroy();
-}`,
-            type:
-                "destroyTouch"
+}`
         };
     }
-    /* BOUNCE */
-    if (
-        lower.includes("bounce")
-    ) {
-        return {
-            target,
-            trigger:
-                "when touching ground",
-            action:
-                "bounce",
-            code:
-`if (${target}.onGround) {
-    ${target}.velocityY = -8;
-}`,
-            type:
-                "bounce"
-        };
-    }
-    /* ROTATE */
-    if (
-        lower.includes("rotate") ||
-        lower.includes("spin")
-    ) {
-        return {
-            target,
-            trigger:
-                "always",
-            action:
-                "rotate",
-            code:
-`everyFrame(() => {
-    ${target}.rotation += 2;
-});`,
-            type:
-                "rotate"
-        };
-    }
-    /* GROW */
-    if (
-        lower.includes("grow")
-    ) {
-        return {
-            target,
-            trigger:
-                "player nearby",
-            action:
-                "grow",
-            code:
-`if (distance(${target}, player) < 180) {
-    ${target}.scale += 0.01;
-}`,
-            type:
-                "grow"
-        };
-    }
-    /* SHRINK */
-    if (
-        lower.includes("shrink") ||
-        lower.includes("get smaller")
-    ) {
-        return {
-            target,
-            trigger:
-                "player nearby",
-            action:
-                "shrink",
-            code:
-`if (distance(${target}, player) < 180) {
-    ${target}.scale -= 0.01;
-}`,
-            type:
-                "shrink"
-        };
-    }
-    /* HEALTH */
+    /* HEALTH DAMAGE */
     if (
         lower.includes("lose") &&
         lower.includes("health")
@@ -1179,24 +1742,23 @@ function understand(text) {
         return {
             target,
             trigger:
-                "player attacks object",
+                "object is attacked",
             action:
                 "lose " +
                 amount +
                 " health",
+            type:
+                "damage",
+            amount,
             code:
 `if (${target}.attacked) {
     ${target}.health -= ${amount};
-}`,
-            type:
-                "damage",
-            amount
+}`
         };
     }
     /* EXPLODE */
     if (
-        lower.includes("explode") ||
-        lower.includes("explodes")
+        lower.includes("explode")
     ) {
         return {
             target,
@@ -1204,12 +1766,85 @@ function understand(text) {
                 "player touches object",
             action:
                 "explode",
+            type:
+                "explode",
             code:
 `if (${target}.touching(player)) {
     ${target}.explode();
-}`,
+}`
+        };
+    }
+    /* BOUNCE */
+    if (
+        lower.includes("bounce")
+    ) {
+        return {
+            target,
+            trigger:
+                "object touches ground",
+            action:
+                "bounce",
             type:
-                "explode"
+                "bounce",
+            code:
+`if (${target}.onGround) {
+    ${target}.velocityY = -9;
+}`
+        };
+    }
+    /* ROTATE */
+    if (
+        lower.includes("rotate") ||
+        lower.includes("spin")
+    ) {
+        return {
+            target,
+            trigger:
+                "always",
+            action:
+                "rotate",
+            type:
+                "rotate",
+            code:
+`everyFrame(() => {
+    ${target}.rotation += 2;
+});`
+        };
+    }
+    /* GROW */
+    if (
+        lower.includes("grow")
+    ) {
+        return {
+            target,
+            trigger:
+                "player is nearby",
+            action:
+                "grow",
+            type:
+                "grow",
+            code:
+`if (distance(${target}, player) < 180) {
+    ${target}.scale += 0.01;
+}`
+        };
+    }
+    /* SHRINK */
+    if (
+        lower.includes("shrink")
+    ) {
+        return {
+            target,
+            trigger:
+                "player is nearby",
+            action:
+                "shrink",
+            type:
+                "shrink",
+            code:
+`if (distance(${target}, player) < 180) {
+    ${target}.scale -= 0.01;
+}`
         };
     }
     /* TELEPORT */
@@ -1222,41 +1857,18 @@ function understand(text) {
                 "player gets close",
             action:
                 "teleport",
+            type:
+                "teleport",
             code:
 `if (distance(${target}, player) < 120) {
     ${target}.teleport(randomPosition());
-}`,
-            type:
-                "teleport"
-        };
-    }
-    /* STOP */
-    if (
-        lower.includes("stop") &&
-        (
-            lower.includes("moving") ||
-            lower.includes("move")
-        )
-    ) {
-        return {
-            target,
-            trigger:
-                "player gets close",
-            action:
-                "stop moving",
-            code:
-`if (distance(${target}, player) < 100) {
-    ${target}.velocityX = 0;
-    ${target}.velocityY = 0;
-}`,
-            type:
-                "stop"
+}`
         };
     }
     return null;
 }
 /* =========================================================
-   RULE UI
+   RULE DISPLAY
 ========================================================= */
 function renderRules() {
     const list =
@@ -1266,24 +1878,30 @@ function renderRules() {
     list.innerHTML = "";
     const asset =
         assets[selectedAsset];
-    if (!asset || asset.rules.length === 0) {
+    if (
+        !asset ||
+        !asset.rules.length
+    ) {
         list.innerHTML =
-            `<div style="color:#8993a5;font-size:11px;">
+            `<div style="color:#8993a5;font-size:11px">
                 No behaviors yet.
             </div>`;
         return;
     }
     asset.rules.forEach(
-        (rule, index) => {
+        (rule,index) => {
             const div =
                 document.createElement(
                     "div"
                 );
-            div.className = "rule";
+            div.className =
+                "rule";
             div.innerHTML = `
-                <div class="rule-top">
+                <div class="rule-header">
                     <span class="rule-action">
-                        ${escapeHTML(rule.action)}
+                        ${escapeHTML(
+                            rule.action
+                        )}
                     </span>
                     <button
                         class="delete-rule"
@@ -1291,18 +1909,22 @@ function renderRules() {
                         ×
                     </button>
                 </div>
-                <div style="margin-top:4px;">
-                    ${escapeHTML(rule.trigger)}
+                <div style="margin-top:4px">
+                    ${escapeHTML(
+                        rule.trigger
+                    )}
                 </div>
             `;
-            list.appendChild(div);
+            list.appendChild(
+                div
+            );
         }
     );
 }
 function deleteRule(index) {
     assets[selectedAsset]
         .rules
-        .splice(index, 1);
+        .splice(index,1);
     renderRules();
     saveProject();
 }
@@ -1316,10 +1938,10 @@ const gameCanvas =
 const gameCtx =
     gameCanvas.getContext("2d");
 const player = {
-    x: 450,
+    x: 430,
     y: 350,
-    width: 35,
-    height: 45,
+    width: 36,
+    height: 46,
     velocityX: 0,
     velocityY: 0,
     speed: 3.5,
@@ -1330,115 +1952,79 @@ const keys = {};
 window.addEventListener(
     "keydown",
     e => {
-        keys[e.key.toLowerCase()] = true;
+        keys[
+            e.key.toLowerCase()
+        ] = true;
     }
 );
 window.addEventListener(
     "keyup",
     e => {
-        keys[e.key.toLowerCase()] = false;
+        keys[
+            e.key.toLowerCase()
+        ] = false;
     }
 );
+/* =========================
+   GAME OBJECT CREATION
+========================= */
 function buildGameObjects() {
     gameObjects = [];
     assets.forEach(
-        (asset, index) => {
-            if (index === selectedAsset) {
-                gameObjects.push({
-                    asset,
-                    x:
-                        180 +
-                        index * 110,
-                    y:
-                        300,
-                    width:
-                        55,
-                    height:
-                        55,
-                    velocityX: 0,
-                    velocityY: 0,
-                    rotation: 0,
-                    scale: 1,
-                    health:
-                        asset.properties.health,
-                    visible: true,
-                    direction: 1,
-                    animationTime: 0,
-                    patrolStart:
-                        150,
-                    patrolEnd:
-                        700
-                });
-            }
+        (asset,index) => {
+            gameObjects.push({
+                asset,
+                x:
+                    150 +
+                    index * 130,
+                y:
+                    300,
+                width:
+                    58,
+                height:
+                    58,
+                velocityX: 0,
+                velocityY: 0,
+                rotation: 0,
+                scale: 1,
+                visible: true,
+                direction: 1,
+                animation: "Idle",
+                animationFrame: 0,
+                animationTimer: 0,
+                imageCache: {}
+            });
         }
     );
 }
-function startGame() {
-    if (gameRunning) return;
-    gameRunning = true;
-    buildGameObjects();
-    player.x = 450;
-    player.y = 350;
-    player.velocityX = 0;
-    player.velocityY = 0;
-    document.getElementById(
-        "gameStatus"
-    ).textContent =
-        "Game running";
-    lastTime =
-        performance.now();
-    requestAnimationFrame(
-        gameLoop
-    );
-}
-function stopGame() {
-    gameRunning = false;
-    document.getElementById(
-        "gameStatus"
-    ).textContent =
-        "Game stopped";
-}
-function resetGame() {
-    buildGameObjects();
-    player.x = 450;
-    player.y = 350;
-    player.velocityX = 0;
-    player.velocityY = 0;
-    drawGame();
-}
-function gameLoop(time) {
-    if (!gameRunning) return;
-    const dt =
-        Math.min(
-            (time - lastTime) / 16.67,
-            2
-        );
-    lastTime = time;
-    updateGame(dt);
-    drawGame();
-    requestAnimationFrame(
-        gameLoop
-    );
-}
-/* =========================================================
+/* =========================
    PLAYER
-========================================================= */
+========================= */
 function updatePlayer(dt) {
-    player.velocityX = 0;
+    let inputX = 0;
     if (
         keys["arrowleft"] ||
         keys["a"]
-    ) {
-        player.velocityX =
-            -player.speed;
-    }
+    )
+        inputX--;
     if (
         keys["arrowright"] ||
         keys["d"]
-    ) {
-        player.velocityX =
-            player.speed;
-    }
+    )
+        inputX++;
+    inputX +=
+        joystickX;
+    inputX =
+        Math.max(
+            -1,
+            Math.min(
+                1,
+                inputX
+            )
+        );
+    player.velocityX =
+        inputX *
+        player.speed;
     if (
         (
             keys["arrowup"] ||
@@ -1447,25 +2033,29 @@ function updatePlayer(dt) {
         ) &&
         player.onGround
     ) {
-        player.velocityY =
-            -player.jumpPower;
-        player.onGround = false;
+        jumpPlayer();
     }
     player.velocityY +=
-        0.45 * dt;
+        .45 * dt;
     player.x +=
         player.velocityX * dt;
     player.y +=
         player.velocityY * dt;
+    const ground =
+        gameCanvas.height -
+        55;
     if (
-        player.y + player.height >=
-        gameCanvas.height - 55
+        player.y +
+        player.height >=
+        ground
     ) {
         player.y =
-            gameCanvas.height - 55 -
+            ground -
             player.height;
         player.velocityY = 0;
         player.onGround = true;
+    } else {
+        player.onGround = false;
     }
     player.x =
         Math.max(
@@ -1477,31 +2067,40 @@ function updatePlayer(dt) {
             )
         );
 }
-/* =========================================================
-   RULE EXECUTION
-========================================================= */
-function updateObject(obj, dt) {
-    if (!obj.visible) return;
-    obj.animationTime += dt;
-    const asset =
-        obj.asset;
+function jumpPlayer() {
+    if (!player.onGround)
+        return;
+    player.velocityY =
+        -player.jumpPower;
+    player.onGround =
+        false;
+}
+/* =========================
+   OBJECT RULES
+========================= */
+function updateObject(obj,dt) {
+    if (!obj.visible)
+        return;
+    obj.animationTimer += dt;
     const distanceToPlayer =
         distance(
             obj,
             player
         );
     for (
-        const rule of asset.rules
+        const rule of obj.asset.rules
     ) {
         switch(rule.type) {
             case "jumpNear":
                 if (
                     distanceToPlayer <
                     150 &&
-                    obj.velocityY === 0
+                    Math.abs(
+                        obj.velocityY
+                    ) < .1
                 ) {
                     obj.velocityY =
-                        -8;
+                        -9;
                 }
                 break;
             case "follow":
@@ -1510,44 +2109,84 @@ function updateObject(obj, dt) {
                     350
                 ) {
                     obj.velocityX =
-                        player.x > obj.x
-                        ? 1.7
-                        : -1.7;
+                        player.x >
+                        obj.x
+                        ? 2
+                        : -2;
+                }
+                break;
+            case "flee":
+                if (
+                    distanceToPlayer <
+                    180
+                ) {
+                    obj.velocityX =
+                        player.x >
+                        obj.x
+                        ? -3
+                        : 3;
                 }
                 break;
             case "chase":
                 if (
                     distanceToPlayer <
-                    300
+                    350
                 ) {
                     obj.velocityX =
-                        player.x > obj.x
+                        player.x >
+                        obj.x
                         ? 3
                         : -3;
                 }
                 break;
             case "patrol":
                 if (
-                    obj.x <=
-                    obj.patrolStart
-                ) {
+                    obj.x <
+                    100
+                )
                     obj.direction = 1;
-                }
                 if (
-                    obj.x >=
-                    obj.patrolEnd
-                ) {
+                    obj.x >
+                    760
+                )
                     obj.direction = -1;
-                }
                 obj.velocityX =
-                    1.5 *
-                    obj.direction;
+                    obj.direction *
+                    1.5;
                 break;
-            case "left":
-                obj.velocityX = -2;
+            case "animationMoving":
+                if (
+                    Math.abs(
+                        obj.velocityX
+                    ) > .1
+                ) {
+                    setObjectAnimation(
+                        obj,
+                        "Walk"
+                    );
+                }
                 break;
-            case "right":
-                obj.velocityX = 2;
+            case "animationIdle":
+                if (
+                    Math.abs(
+                        obj.velocityX
+                    ) < .1
+                ) {
+                    setObjectAnimation(
+                        obj,
+                        "Idle"
+                    );
+                }
+                break;
+            case "animationJump":
+                if (
+                    obj.velocityY < 0
+                ) {
+                    setObjectAnimation(
+                        obj,
+                        "Jump"
+                    );
+                }
                 break;
             case "destroyTouch":
                 if (
@@ -1556,22 +2195,24 @@ function updateObject(obj, dt) {
                         player
                     )
                 ) {
-                    obj.visible = false;
+                    obj.visible =
+                        false;
                 }
                 break;
             case "bounce":
                 if (
                     obj.y +
                     obj.height >=
-                    gameCanvas.height - 55
+                    gameCanvas.height -
+                    55
                 ) {
                     obj.velocityY =
-                        -8;
+                        -9;
                 }
                 break;
             case "rotate":
                 obj.rotation +=
-                    0.04 * dt;
+                    .04 * dt;
                 break;
             case "grow":
                 if (
@@ -1582,7 +2223,7 @@ function updateObject(obj, dt) {
                         Math.min(
                             2,
                             obj.scale +
-                            0.003 * dt
+                            .004 * dt
                         );
                 }
                 break;
@@ -1595,7 +2236,7 @@ function updateObject(obj, dt) {
                         Math.max(
                             .3,
                             obj.scale -
-                            0.003 * dt
+                            .004 * dt
                         );
                 }
                 break;
@@ -1606,7 +2247,8 @@ function updateObject(obj, dt) {
                         player
                     )
                 ) {
-                    obj.visible = false;
+                    obj.visible =
+                        false;
                     createParticles(
                         obj.x,
                         obj.y
@@ -1617,39 +2259,33 @@ function updateObject(obj, dt) {
                 if (
                     distanceToPlayer <
                     120 &&
-                    Math.random() < .01
+                    Math.random() <
+                    .01
                 ) {
                     obj.x =
-                        100 +
+                        80 +
                         Math.random() *
                         700;
                     obj.y =
                         100 +
                         Math.random() *
-                        200;
-                }
-                break;
-            case "stop":
-                if (
-                    distanceToPlayer <
-                    100
-                ) {
-                    obj.velocityX = 0;
+                        180;
                 }
                 break;
         }
     }
-    /* PHYSICS */
     obj.velocityY +=
-        0.45 * dt;
+        .45 * dt;
     obj.x +=
         obj.velocityX * dt;
     obj.y +=
         obj.velocityY * dt;
     const ground =
-        gameCanvas.height - 55;
+        gameCanvas.height -
+        55;
     if (
-        obj.y + obj.height >=
+        obj.y +
+        obj.height >=
         ground
     ) {
         obj.y =
@@ -1666,26 +2302,72 @@ function updateObject(obj, dt) {
                 obj.x
             )
         );
+    updateObjectAnimation(
+        obj
+    );
+}
+/* =========================================================
+   ANIMATION RUNTIME
+========================================================= */
+function setObjectAnimation(
+    obj,
+    animation
+) {
+    if (
+        obj.animation !==
+        animation
+    ) {
+        obj.animation =
+            animation;
+        obj.animationFrame =
+            0;
+        obj.animationTimer =
+            0;
+    }
+}
+function updateObjectAnimation(obj) {
+    const frames =
+        obj.asset
+            .animations[
+                obj.animation
+            ] || [];
+    if (!frames.length)
+        return;
+    const fps = 8;
+    if (
+        obj.animationTimer >
+        60 / fps
+    ) {
+        obj.animationTimer = 0;
+        obj.animationFrame =
+            (
+                obj.animationFrame + 1
+            ) %
+            frames.length;
+    }
 }
 /* =========================================================
    PARTICLES
 ========================================================= */
-let particles = [];
-function createParticles(x, y) {
+function createParticles(x,y) {
     for (
-        let i = 0;
-        i < 25;
+        let i=0;
+        i<25;
         i++
     ) {
         particles.push({
             x,
             y,
             vx:
-                (Math.random() - .5) *
-                8,
+                (
+                    Math.random() -
+                    .5
+                ) * 8,
             vy:
-                (Math.random() - .5) *
-                8,
+                (
+                    Math.random() -
+                    .5
+                ) * 8,
             life: 1
         });
     }
@@ -1701,13 +2383,60 @@ function updateParticles() {
     );
     particles =
         particles.filter(
-            p => p.life > 0
+            p =>
+                p.life > 0
         );
 }
 /* =========================================================
-   GAME UPDATE
+   GAME LOOP
 ========================================================= */
-function updateGame(dt) {
+function startGame() {
+    if (gameRunning)
+        return;
+    gameRunning = true;
+    buildGameObjects();
+    resetPlayer();
+    document.getElementById(
+        "gameStatus"
+    ).textContent =
+        "Game running";
+    lastTime =
+        performance.now();
+    requestAnimationFrame(
+        gameLoop
+    );
+}
+function stopGame() {
+    gameRunning =
+        false;
+    document.getElementById(
+        "gameStatus"
+    ).textContent =
+        "Game stopped";
+}
+function resetGame() {
+    buildGameObjects();
+    resetPlayer();
+    particles = [];
+    drawGame();
+}
+function resetPlayer() {
+    player.x = 430;
+    player.y = 350;
+    player.velocityX = 0;
+    player.velocityY = 0;
+}
+function gameLoop(time) {
+    if (!gameRunning)
+        return;
+    const dt =
+        Math.min(
+            (time-lastTime) /
+            16.67,
+            2
+        );
+    lastTime =
+        time;
     updatePlayer(dt);
     gameObjects.forEach(
         obj =>
@@ -1717,95 +2446,105 @@ function updateGame(dt) {
             )
     );
     updateParticles();
+    drawGame();
+    requestAnimationFrame(
+        gameLoop
+    );
 }
 /* =========================================================
-   GAME DRAW
+   GAME RENDERING
 ========================================================= */
 function drawGame() {
     gameCtx.clearRect(
         0,
         0,
-        gameCanvas.width,
-        gameCanvas.height
+        900,
+        506
     );
-    /* SKY */
     const sky =
         gameCtx.createLinearGradient(
             0,
             0,
             0,
-            gameCanvas.height
+            506
         );
     sky.addColorStop(
         0,
-        "#87cefa"
+        "#9bdcff"
     );
     sky.addColorStop(
         1,
-        "#dff6ff"
+        "#e5f8ff"
     );
     gameCtx.fillStyle =
         sky;
     gameCtx.fillRect(
         0,
         0,
-        gameCanvas.width,
-        gameCanvas.height
+        900,
+        506
     );
+    /* SUN */
+    gameCtx.fillStyle =
+        "#fff0a8";
+    gameCtx.beginPath();
+    gameCtx.arc(
+        760,
+        80,
+        35,
+        0,
+        Math.PI * 2
+    );
+    gameCtx.fill();
     /* CLOUDS */
     gameCtx.fillStyle =
         "rgba(255,255,255,.75)";
     for (
-        let i = 0;
-        i < 4;
+        let i=0;
+        i<4;
         i++
     ) {
         const x =
-            100 +
-            i * 220;
+            80 + i * 230;
         const y =
-            70 +
-            (i % 2) * 40;
+            80 + (i%2)*35;
         gameCtx.beginPath();
         gameCtx.arc(
             x,
             y,
-            22,
+            20,
             0,
-            Math.PI * 2
+            Math.PI*2
         );
         gameCtx.arc(
-            x + 25,
-            y - 8,
+            x+25,
+            y-9,
             28,
             0,
-            Math.PI * 2
+            Math.PI*2
         );
         gameCtx.arc(
-            x + 55,
+            x+55,
             y,
-            22,
+            20,
             0,
-            Math.PI * 2
+            Math.PI*2
         );
         gameCtx.fill();
     }
     /* GROUND */
     gameCtx.fillStyle =
-        "#65a84f";
+        "#65ad55";
     gameCtx.fillRect(
         0,
-        gameCanvas.height - 55,
-        gameCanvas.width,
+        451,
+        900,
         55
     );
-    /* OBJECTS */
     gameObjects.forEach(
         drawObject
     );
-    /* PLAYER */
     drawPlayer();
-    /* PARTICLES */
     particles.forEach(
         p => {
             gameCtx.globalAlpha =
@@ -1821,28 +2560,28 @@ function drawGame() {
         }
     );
     gameCtx.globalAlpha = 1;
-    /* CONTROLS */
+    /* CONTROLS LABEL */
     gameCtx.fillStyle =
-        "rgba(0,0,0,.35)";
+        "rgba(0,0,0,.3)";
     gameCtx.fillRect(
         15,
         15,
-        190,
-        38
+        185,
+        34
     );
     gameCtx.fillStyle =
         "white";
     gameCtx.font =
-        "14px Arial";
+        "13px Arial";
     gameCtx.fillText(
-        "WASD / Arrow Keys to move",
-        27,
-        39
+        "WASD / Arrows / Touch",
+        26,
+        37
     );
 }
 function drawPlayer() {
     gameCtx.fillStyle =
-        "#5965ff";
+        "#655cf0";
     gameCtx.fillRect(
         player.x,
         player.y,
@@ -1852,28 +2591,43 @@ function drawPlayer() {
     gameCtx.fillStyle =
         "white";
     gameCtx.fillRect(
-        player.x + 7,
-        player.y + 9,
+        player.x+7,
+        player.y+9,
         7,
         7
     );
     gameCtx.fillRect(
-        player.x + 22,
-        player.y + 9,
+        player.x+22,
+        player.y+9,
         7,
         7
     );
 }
 function drawObject(obj) {
-    if (!obj.visible) return;
-    const asset =
-        obj.asset;
+    if (!obj.visible)
+        return;
+    const frames =
+        obj.asset
+            .animations[
+                obj.animation
+            ] || [];
+    let source =
+        obj.asset.texture;
+    if (
+        frames.length
+    ) {
+        source =
+            frames[
+                obj.animationFrame %
+                frames.length
+            ];
+    }
     const cx =
         obj.x +
-        obj.width / 2;
+        obj.width/2;
     const cy =
         obj.y +
-        obj.height / 2;
+        obj.height/2;
     gameCtx.save();
     gameCtx.translate(
         cx,
@@ -1886,34 +2640,37 @@ function drawObject(obj) {
         obj.scale,
         obj.scale
     );
-    if (asset.texture) {
-        if (!obj.image) {
-            obj.image =
-                new Image();
-            obj.image.src =
-                asset.texture;
-        }
+    if (source) {
         if (
-            obj.image.complete
+            !obj.imageCache[source]
+        ) {
+            const image =
+                new Image();
+            image.src =
+                source;
+            obj.imageCache[source] =
+                image;
+        }
+        const image =
+            obj.imageCache[source];
+        if (
+            image.complete
         ) {
             gameCtx.drawImage(
-                obj.image,
-                -obj.width / 2,
-                -obj.height / 2,
+                image,
+                -obj.width/2,
+                -obj.height/2,
                 obj.width,
                 obj.height
             );
         }
     } else {
-        /*
-           Default generated placeholder.
-        */
         gameCtx.fillStyle =
-            "#252b38";
+            "#333847";
         gameCtx.beginPath();
         gameCtx.roundRect(
-            -obj.width / 2,
-            -obj.height / 2,
+            -obj.width/2,
+            -obj.height/2,
             obj.width,
             obj.height,
             12
@@ -1922,104 +2679,207 @@ function drawObject(obj) {
         gameCtx.fillStyle =
             "white";
         gameCtx.font =
-            "10px Arial";
+            "9px Arial";
         gameCtx.textAlign =
             "center";
         gameCtx.fillText(
-            asset.name.substring(
-                0,
-                9
-            ),
+            obj.asset.name
+                .substring(0,9),
             0,
-            4
+            3
         );
     }
     gameCtx.restore();
 }
 /* =========================================================
-   COLLISION HELPERS
+   COLLISIONS
 ========================================================= */
-function distance(a, b) {
+function distance(a,b) {
     const ax =
-        a.x +
-        a.width / 2;
+        a.x+a.width/2;
     const ay =
-        a.y +
-        a.height / 2;
+        a.y+a.height/2;
     const bx =
-        b.x +
-        b.width / 2;
+        b.x+b.width/2;
     const by =
-        b.y +
-        b.height / 2;
+        b.y+b.height/2;
     return Math.hypot(
-        ax - bx,
-        ay - by
+        ax-bx,
+        ay-by
     );
 }
-function touching(a, b) {
+function touching(a,b) {
     return (
         a.x <
-        b.x + b.width &&
-        a.x + a.width >
+        b.x+b.width &&
+        a.x+a.width >
         b.x &&
         a.y <
-        b.y + b.height &&
-        a.y + a.height >
+        b.y+b.height &&
+        a.y+a.height >
         b.y
     );
 }
 /* =========================================================
-   EDITOR MODES
+   IPAD JOYSTICK
 ========================================================= */
-function showPaint() {
+let joystickX = 0;
+const joystick =
+    document.getElementById(
+        "joystick"
+    );
+const joystickKnob =
+    document.getElementById(
+        "joystickKnob"
+    );
+function updateJoystick(e) {
+    const rect =
+        joystick.getBoundingClientRect();
+    const centerX =
+        rect.left +
+        rect.width/2;
+    let x =
+        e.clientX -
+        centerX;
+    const max =
+        35;
+    x =
+        Math.max(
+            -max,
+            Math.min(
+                max,
+                x
+            )
+        );
+    joystickX =
+        x/max;
+    joystickKnob.style.transform =
+        `translate(${x}px,0)`;
+}
+function resetJoystick() {
+    joystickX = 0;
+    joystickKnob.style.transform =
+        "translate(0,0)";
+}
+joystick.addEventListener(
+    "pointerdown",
+    e => {
+        joystick.setPointerCapture(
+            e.pointerId
+        );
+        updateJoystick(e);
+    }
+);
+joystick.addEventListener(
+    "pointermove",
+    e => {
+        if (
+            joystick.hasPointerCapture(
+                e.pointerId
+            )
+        ) {
+            updateJoystick(e);
+        }
+    }
+);
+joystick.addEventListener(
+    "pointerup",
+    resetJoystick
+);
+joystick.addEventListener(
+    "pointercancel",
+    resetJoystick
+);
+document.getElementById(
+    "jumpButton"
+).addEventListener(
+    "pointerdown",
+    e => {
+        e.preventDefault();
+        jumpPlayer();
+    }
+);
+document.getElementById(
+    "actionButton"
+).addEventListener(
+    "pointerdown",
+    e => {
+        e.preventDefault();
+        keys["e"] = true;
+        setTimeout(
+            () => {
+                keys["e"] = false;
+            },
+            150
+        );
+    }
+);
+/* =========================================================
+   MODES
+========================================================= */
+function showMode(mode) {
+    currentMode =
+        mode;
     document.getElementById(
         "paintMode"
     ).style.display =
-        "flex";
+        mode === "paint"
+        ? "flex"
+        : "none";
+    document.getElementById(
+        "animationMode"
+    ).style.display =
+        mode === "animation"
+        ? "flex"
+        : "none";
     document.getElementById(
         "gameMode"
     ).style.display =
-        "none";
-    document.getElementById(
-        "paintTab"
-    ).classList.add("active");
-    document.getElementById(
-        "gameTab"
-    ).classList.remove("active");
-}
-function showGame() {
-    document.getElementById(
-        "paintMode"
-    ).style.display =
-        "none";
-    document.getElementById(
-        "gameMode"
-    ).style.display =
-        "flex";
-    document.getElementById(
-        "paintTab"
-    ).classList.remove("active");
-    document.getElementById(
-        "gameTab"
-    ).classList.add("active");
-    drawGame();
-}
-function toggleGame() {
-    showGame();
-    if (gameRunning) {
-        stopGame();
-    } else {
-        startGame();
+        mode === "game"
+        ? "flex"
+        : "none";
+    document.querySelectorAll(
+        ".tab"
+    ).forEach(
+        tab =>
+            tab.classList.remove(
+                "active"
+            )
+    );
+    if (mode === "paint")
+        document.getElementById(
+            "paintTab"
+        ).classList.add("active");
+    if (mode === "animation")
+        document.getElementById(
+            "animationTab"
+        ).classList.add("active");
+    if (mode === "game")
+        document.getElementById(
+            "gameTab"
+        ).classList.add("active");
+    if (mode === "animation") {
+        renderFrames();
+        updateAnimationPreview();
+    }
+    if (mode === "game") {
+        drawGame();
     }
 }
+function toggleGame() {
+    showMode("game");
+    if (gameRunning)
+        stopGame();
+    else
+        startGame();
+}
 /* =========================================================
-   SAVE / EXPORT
+   SAVE
 ========================================================= */
 function saveProject() {
-    saveCurrentTexture();
+    saveTexture();
     localStorage.setItem(
-        "textureforge-project-v020",
+        "textureforge-project-v030",
         JSON.stringify(
             assets
         )
@@ -2029,12 +2889,12 @@ function saveProject() {
     );
 }
 function exportProject() {
-    saveCurrentTexture();
+    saveTexture();
     const project = {
         engine:
             "TextureForge AI",
         version:
-            "0.2.0",
+            "0.3.0",
         assets
     };
     const blob =
@@ -2055,54 +2915,74 @@ function exportProject() {
         URL.createObjectURL(
             blob
         );
-    const a =
+    const link =
         document.createElement(
             "a"
         );
-    a.href = url;
-    a.download =
+    link.href =
+        url;
+    link.download =
         "textureforge-game.json";
-    a.click();
-    URL.revokeObjectURL(url);
+    link.click();
+    URL.revokeObjectURL(
+        url
+    );
     setStatus(
-        "Game exported"
+        "Project exported"
     );
 }
 /* =========================================================
-   HELPERS
+   UTILITIES
 ========================================================= */
-function showAI(text) {
+function setStatus(text) {
     document.getElementById(
-        "aiResult"
+        "statusText"
     ).textContent =
         text;
 }
-function setStatus(text) {
+function showAI(text) {
     document.getElementById(
-        "status"
+        "aiOutput"
     ).textContent =
         text;
 }
 function escapeHTML(text) {
     return String(text)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 }
 /* =========================================================
-   INITIAL PROJECT
+   LOAD PROJECT
 ========================================================= */
 function initialize() {
     const saved =
         localStorage.getItem(
-            "textureforge-project-v020"
+            "textureforge-project-v030"
         );
     if (saved) {
         try {
             assets =
-                JSON.parse(saved);
+                JSON.parse(
+                    saved
+                );
         } catch {
             assets = [];
         }
@@ -2114,22 +2994,42 @@ function initialize() {
                     "Penguin",
                 texture:
                     null,
+                animations:
+                    createDefaultAnimations(),
                 rules: [],
                 properties: {
                     health: 100,
                     speed: 2,
-                    jumpPower: 8,
-                    gravity: true,
-                    solid: true
+                    jumpPower: 9
                 }
             }
         ];
     }
+    /*
+       Repair projects created by
+       earlier versions.
+    */
+    assets.forEach(
+        asset => {
+            if (!asset.animations)
+                asset.animations =
+                    createDefaultAnimations();
+            if (!asset.rules)
+                asset.rules = [];
+            if (!asset.properties)
+                asset.properties = {
+                    health: 100,
+                    speed: 2,
+                    jumpPower: 9
+                };
+        }
+    );
     selectedAsset = 0;
-    blankTexture();
+    blankPaint();
     loadTexture();
     renderAssets();
     renderRules();
+    renderFrames();
     drawGame();
 }
 initialize();
