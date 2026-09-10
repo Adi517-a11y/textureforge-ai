@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TextureForge AI</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #11151c;
+    color: white;
+    overflow: hidden;
+}
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.app {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* TOP BAR */
+
+.topbar {
+    height: 58px;
+    background: #1a202a;
+    border-bottom: 1px solid #303846;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 15px;
+}
+
+.logo {
+    font-weight: bold;
+    font-size: 19px;
+    color: #8ec5ff;
+}
+
+.project-name {
+    color: #9da8b8;
+    font-size: 14px;
+}
+
+.top-spacer {
+    flex: 1;
+}
+
+.top-button {
+    background: #252d39;
+    color: white;
+    border: 1px solid #394454;
+    border-radius: 7px;
+    padding: 8px 13px;
+}
+
+.top-button:hover {
+    background: #303a49;
+}
+
+/* MAIN */
+
+.main {
+    flex: 1;
+    display: flex;
+    min-height: 0;
+}
+
+/* LEFT */
+
+.left-panel {
+    width: 245px;
+    background: #171c24;
+    border-right: 1px solid #303846;
+    display: flex;
+    flex-direction: column;
+}
+
+.panel-title {
+    padding: 15px;
+    font-size: 13px;
+    text-transform: uppercase;
+    color: #8e99aa;
+    letter-spacing: 1px;
+}
+
+.assets {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+}
+
+.asset {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px;
+    border-radius: 7px;
+    margin-bottom: 4px;
+    cursor: pointer;
+}
+
+.asset:hover {
+    background: #222a35;
+}
+
+.asset.selected {
+    background: #26364a;
+}
+
+.asset-preview {
+    width: 38px;
+    height: 38px;
+    border: 1px solid #455161;
+    image-rendering: pixelated;
+    background:
+        linear-gradient(45deg, #ddd 25%, transparent 25%),
+        linear-gradient(-45deg, #ddd 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #ddd 75%),
+        linear-gradient(-45deg, transparent 75%, #ddd 75%);
+    background-size: 10px 10px;
+    background-position: 0 0, 0 5px, 5px -5px, -5px 0;
+}
+
+.asset-name {
+    font-size: 14px;
+}
+
+.add-asset {
+    margin: 10px;
+    padding: 10px;
+    background: #2878d4;
+    border: none;
+    color: white;
+    border-radius: 7px;
+}
+
+.add-asset:hover {
+    background: #3489e9;
+}
+
+/* CENTER */
+
+.center {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.toolbar {
+    height: 52px;
+    background: #1b212b;
+    border-bottom: 1px solid #303846;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 12px;
+}
+
+.tool {
+    width: 38px;
+    height: 35px;
+    background: #252d39;
+    color: white;
+    border: 1px solid #3b4656;
+    border-radius: 6px;
+}
+
+.tool.active {
+    background: #347dc4;
+}
+
+.color-input {
+    width: 40px;
+    height: 35px;
+    padding: 2px;
+    border: 1px solid #3b4656;
+    background: #252d39;
+}
+
+.size-input {
+    width: 60px;
+    background: #252d39;
+    border: 1px solid #3b4656;
+    color: white;
+    border-radius: 5px;
+    padding: 7px;
+}
+
+.canvas-area {
+    flex: 1;
+    position: relative;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #10141b;
+
+    background-image:
+        linear-gradient(#1b222c 1px, transparent 1px),
+        linear-gradient(90deg, #1b222c 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+#paintCanvas {
+    width: 512px;
+    height: 512px;
+    image-rendering: pixelated;
+    border: 2px solid #536173;
+    background: white;
+    cursor: crosshair;
+    touch-action: none;
+}
+
+.canvas-label {
+    position: absolute;
+    top: 12px;
+    left: 14px;
+    color: #778397;
+    font-size: 12px;
+    pointer-events: none;
+}
+
+/* RIGHT */
+
+.right-panel {
+    width: 330px;
+    background: #171c24;
+    border-left: 1px solid #303846;
+    display: flex;
+    flex-direction: column;
+    min-width: 260px;
+}
+
+.section {
+    border-bottom: 1px solid #303846;
+    padding: 14px;
+}
+
+.section-title {
+    color: #9ba6b7;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+}
+
+.name-input {
+    width: 100%;
+    background: #222934;
+    color: white;
+    border: 1px solid #3a4656;
+    border-radius: 6px;
+    padding: 9px;
+}
+
+.ai-box {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.ai-input {
+    width: 100%;
+    min-height: 100px;
+    resize: vertical;
+    background: #11161d;
+    border: 1px solid #3b4656;
+    border-radius: 7px;
+    color: white;
+    padding: 10px;
+    outline: none;
+}
+
+.ai-input:focus {
+    border-color: #4c91df;
+}
+
+.run-ai {
+    margin-top: 8px;
+    width: 100%;
+    background: #7b4ed4;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    padding: 10px;
+}
+
+.run-ai:hover {
+    background: #8c5be7;
+}
+
+.ai-output {
+    margin-top: 10px;
+    padding: 10px;
+    background: #10151c;
+    border: 1px solid #303a49;
+    border-radius: 7px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #b9c4d4;
+    overflow-y: auto;
+    max-height: 150px;
+}
+
+.rule-list {
+    max-height: 180px;
+    overflow-y: auto;
+}
+
+.rule {
+    background: #202732;
+    border: 1px solid #303b4a;
+    border-radius: 6px;
+    padding: 9px;
+    margin-bottom: 6px;
+    font-size: 12px;
+}
+
+.rule strong {
+    color: #a9d3ff;
+}
+
+.delete-rule {
+    float: right;
+    background: transparent;
+    color: #ff7777;
+    border: none;
+}
+
+/* BOTTOM */
+
+.statusbar {
+    height: 30px;
+    background: #202630;
+    border-top: 1px solid #303846;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    gap: 20px;
+    color: #8d99aa;
+    font-size: 11px;
+}
+
+.green {
+    color: #65d69b;
+}
+
+@media(max-width: 900px) {
+
+    .left-panel {
+        width: 180px;
+    }
+
+    .right-panel {
+        width: 280px;
+    }
+
+}
+
+@media(max-width: 700px) {
+
+    .left-panel {
+        display: none;
+    }
+
+    .right-panel {
+        width: 270px;
+    }
+
+    #paintCanvas {
+        width: 380px;
+        height: 380px;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <div class="topbar">
+
+        <div class="logo">
+            TextureForge AI
+        </div>
+
+        <div class="project-name">
+            Game Project
+        </div>
+
+        <div class="top-spacer"></div>
+
+        <button class="top-button" onclick="saveProject()">
+            Save
+        </button>
+
+        <button class="top-button" onclick="exportProject()">
+            Export
+        </button>
+
+    </div>
+
+
+    <div class="main">
+
+        <!-- LEFT ASSET PANEL -->
+
+        <aside class="left-panel">
+
+            <div class="panel-title">
+                Assets
+            </div>
+
+            <div id="assetList" class="assets"></div>
+
+            <button class="add-asset" onclick="createAsset()">
+                + New Asset
+            </button>
+
+        </aside>
+
+
+        <!-- CENTER EDITOR -->
+
+        <main class="center">
+
+            <div class="toolbar">
+
+                <button id="pencilTool"
+                        class="tool active"
+                        onclick="setTool('pencil')">
+                    ✎
+                </button>
+
+                <button class="tool"
+                        onclick="setTool('eraser')">
+                    ⌫
+                </button>
+
+                <button class="tool"
+                        onclick="clearCanvas()">
+                    □
+                </button>
+
+                <input
+                    id="colorPicker"
+                    class="color-input"
+                    type="color"
+                    value="#222222"
+                >
+
+                <input
+                    id="brushSize"
+                    class="size-input"
+                    type="number"
+                    min="1"
+                    max="80"
+                    value="8"
+                >
+
+            </div>
+
+
+            <div class="canvas-area">
+
+                <div class="canvas-label">
+                    Texture Painter — 512 × 512
+                </div>
+
+                <canvas
+                    id="paintCanvas"
+                    width="512"
+                    height="512">
+                </canvas>
+
+            </div>
+
+        </main>
+
+
+        <!-- RIGHT PANEL -->
+
+        <aside class="right-panel">
+
+            <div class="section">
+
+                <div class="section-title">
+                    Asset
+                </div>
+
+                <input
+                    id="assetName"
+                    class="name-input"
+                    value="NewAsset"
+                    placeholder="Asset name"
+                    oninput="renameAsset()"
+                >
+
+            </div>
+
+
+            <div class="section ai-box">
+
+                <div class="section-title">
+                    AI Code
+                </div>
+
+                <textarea
+                    id="aiInput"
+                    class="ai-input"
+                    placeholder="Describe what should happen...
+
+Example:
+Penguin jump if player is close
+
+Or:
+Penguin move toward player when player is nearby
+
+Or:
+Penguin disappear when player touches Penguin"></textarea>
+
+                <button
+                    class="run-ai"
+                    onclick="runAI()">
+                    ✦ Make Code Work
+                </button>
+
+                <div id="aiOutput" class="ai-output">
+                    AI ready.
+                </div>
+
+            </div>
+
+
+            <div class="section">
+
+                <div class="section-title">
+                    Active Rules
+                </div>
+
+                <div
+                    id="ruleList"
+                    class="rule-list">
+                </div>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+
+    <div class="statusbar">
+
+        <span>
+            TextureForge AI
+        </span>
+
+        <span id="status">
+            Ready
+        </span>
+
+        <span class="green">
+            ● Local
+        </span>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   TEXTUREFORGE AI
+   ========================================================= */
+
+const canvas = document.getElementById("paintCanvas");
+const ctx = canvas.getContext("2d");
+
+let drawing = false;
+let tool = "pencil";
+
+let assets = [];
+
+let selectedAsset = null;
+
+
+/* =========================================================
+   INITIALIZE
+   ========================================================= */
+
+function initialize() {
+
+    const saved = localStorage.getItem("textureforge-project");
+
+    if (saved) {
+
+        try {
+
+            assets = JSON.parse(saved);
+
+        } catch {
+
+            assets = [];
+
+        }
+
+    }
+
+    if (assets.length === 0) {
+
+        assets.push({
+            name: "Penguin",
+            texture: null,
+            rules: []
+        });
+
+    }
+
+    selectedAsset = 0;
+
+    renderAssets();
+    loadAsset();
+
+    setStatus("Ready");
+
+}
+
+
+/* =========================================================
+   CANVAS
+   ========================================================= */
+
+function resetCanvas() {
+
+    ctx.fillStyle = "#ffffff";
+
+    ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+}
+
+
+function loadAsset() {
+
+    if (
+        selectedAsset === null ||
+        !assets[selectedAsset]
+    ) {
+        return;
+    }
+
+    const asset = assets[selectedAsset];
+
+    document.getElementById("assetName").value =
+        asset.name;
+
+    resetCanvas();
+
+    if (asset.texture) {
+
+        const image = new Image();
+
+        image.onload = function() {
+
+            ctx.clearRect(
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+            ctx.drawImage(
+                image,
+                0,
+                0
+            );
+
+        };
+
+        image.src = asset.texture;
+
+    }
+
+    renderRules();
+
+}
+
+
+function saveCanvasToAsset() {
+
+    if (
+        selectedAsset === null ||
+        !assets[selectedAsset]
+    ) {
+        return;
+    }
+
+    assets[selectedAsset].texture =
+        canvas.toDataURL("image/png");
+
+}
+
+
+/* =========================================================
+   PAINTING
+   ========================================================= */
+
+function getMousePosition(event) {
+
+    const rect =
+        canvas.getBoundingClientRect();
+
+    const scaleX =
+        canvas.width / rect.width;
+
+    const scaleY =
+        canvas.height / rect.height;
+
+    return {
+        x:
+            (event.clientX - rect.left) *
+            scaleX,
+
+        y:
+            (event.clientY - rect.top) *
+            scaleY
+    };
+
+}
+
+
+function startDrawing(event) {
+
+    drawing = true;
+
+    draw(event);
+
+}
+
+
+function stopDrawing() {
+
+    if (!drawing) return;
+
+    drawing = false;
+
+    saveCanvasToAsset();
+
+}
+
+
+function draw(event) {
+
+    if (!drawing) return;
+
+    const pos =
+        getMousePosition(event);
+
+    const size =
+        Number(
+            document.getElementById(
+                "brushSize"
+            ).value
+        );
+
+    ctx.lineWidth = size;
+
+    ctx.lineCap = "round";
+
+    if (tool === "eraser") {
+
+        ctx.globalCompositeOperation =
+            "destination-out";
+
+    } else {
+
+        ctx.globalCompositeOperation =
+            "source-over";
+
+        ctx.strokeStyle =
+            document.getElementById(
+                "colorPicker"
+            ).value;
+
+    }
+
+    ctx.lineTo(
+        pos.x,
+        pos.y
+    );
+
+    ctx.stroke();
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        pos.x,
+        pos.y
+    );
+
+}
+
+
+canvas.addEventListener(
+    "pointerdown",
+    startDrawing
+);
+
+canvas.addEventListener(
+    "pointermove",
+    draw
+);
+
+canvas.addEventListener(
+    "pointerup",
+    stopDrawing
+);
+
+canvas.addEventListener(
+    "pointercancel",
+    stopDrawing
+);
+
+canvas.addEventListener(
+    "pointerleave",
+    stopDrawing
+);
+
+
+function setTool(newTool) {
+
+    tool = newTool;
+
+    document
+        .querySelectorAll(".tool")
+        .forEach(button => {
+
+            button.classList.remove(
+                "active"
+            );
+
+        });
+
+}
+
+
+function clearCanvas() {
+
+    resetCanvas();
+
+    saveCanvasToAsset();
+
+}
+
+
+/* =========================================================
+   ASSETS
+   ========================================================= */
+
+function createAsset() {
+
+    const name =
+        prompt(
+            "Enter the asset name:",
+            "NewAsset"
+        );
+
+    if (!name) return;
+
+    assets.push({
+
+        name:
+            cleanName(name),
+
+        texture:
+            null,
+
+        rules:
+            []
+
+    });
+
+    selectedAsset =
+        assets.length - 1;
+
+    renderAssets();
+
+    loadAsset();
+
+}
+
+
+function cleanName(name) {
+
+    return name
+        .trim()
+        .replace(/\s+/g, "_")
+        .replace(/[^a-zA-Z0-9_]/g, "");
+
+}
+
+
+function renameAsset() {
+
+    if (
+        selectedAsset === null ||
+        !assets[selectedAsset]
+    ) {
+        return;
+    }
+
+    let name =
+        document.getElementById(
+            "assetName"
+        ).value;
+
+    assets[selectedAsset].name =
+        cleanName(name);
+
+    renderAssets();
+
+}
+
+
+function selectAsset(index) {
+
+    saveCanvasToAsset();
+
+    selectedAsset = index;
+
+    renderAssets();
+
+    loadAsset();
+
+}
+
+
+function renderAssets() {
+
+    const list =
+        document.getElementById(
+            "assetList"
+        );
+
+    list.innerHTML = "";
+
+    assets.forEach(
+        (asset, index) => {
+
+            const element =
+                document.createElement(
+                    "div"
+                );
+
+            element.className =
+                "asset" +
+                (
+                    index === selectedAsset
+                    ? " selected"
+                    : ""
+                );
+
+            const preview =
+                document.createElement(
+                    "div"
+                );
+
+            preview.className =
+                "asset-preview";
+
+            if (asset.texture) {
+
+                preview.style.backgroundImage =
+                    `url(${asset.texture})`;
+
+                preview.style.backgroundSize =
+                    "cover";
+
+            }
+
+            const name =
+                document.createElement(
+                    "div"
+                );
+
+            name.className =
+                "asset-name";
+
+            name.textContent =
+                asset.name;
+
+            element.appendChild(preview);
+
+            element.appendChild(name);
+
+            element.onclick =
+                () => selectAsset(index);
+
+            list.appendChild(element);
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   NATURAL LANGUAGE AI
+   ========================================================= */
+
+function runAI() {
+
+    const input =
+        document.getElementById(
+            "aiInput"
+        ).value.trim();
+
+    if (!input) {
+
+        setAIOutput(
+            "Describe a behavior first."
+        );
+
+        return;
+
+    }
+
+    const result =
+        interpretCommand(input);
+
+    if (!result) {
+
+        setAIOutput(
+            "I couldn't understand that rule yet.\n\n" +
+            "Try something like:\n" +
+            "Penguin jump if player is close\n\n" +
+            "Penguin move toward player when player is nearby\n\n" +
+            "Penguin disappear when player touches Penguin"
+        );
+
+        return;
+
+    }
+
+    assets[selectedAsset].rules.push(result);
+
+    renderRules();
+
+    setAIOutput(
+        "✓ Rule understood.\n\n" +
+        "Object: " +
+        result.target +
+        "\n" +
+        "Action: " +
+        result.action +
+        "\n" +
+        "Trigger: " +
+        result.trigger +
+        "\n\n" +
+        "Generated behavior code:\n" +
+        result.code
+    );
+
+    saveProject();
+
+}
+
+
+/* =========================================================
+   COMMAND INTERPRETER
+   ========================================================= */
+
+function interpretCommand(text) {
+
+    const original =
+        text.trim();
+
+    const lower =
+        original.toLowerCase();
+
+    let target =
+        assets[selectedAsset].name;
+
+    /*
+       Find an asset name in the command.
+    */
+
+    for (const asset of assets) {
+
+        if (
+            lower.includes(
+                asset.name.toLowerCase()
+            )
+        ) {
+
+            target =
+                asset.name;
+
+            break;
+
+        }
+
+    }
+
+
+    /*
+       JUMP
+    */
+
+    if (
+        lower.includes("jump") &&
+        (
+            lower.includes("close") ||
+            lower.includes("near") ||
+            lower.includes("nearby")
+        )
+    ) {
+
+        return {
+
+            target,
+
+            action:
+                "jump",
+
+            trigger:
+                "player is nearby",
+
+            code:
+`if (distance(${target}, player) < 5) {
+    ${target}.jump();
+}`,
+
+            original
+
+        };
+
+    }
+
+
+    /*
+       MOVE TOWARD PLAYER
+    */
+
+    if (
+        (
+            lower.includes("move toward") ||
+            lower.includes("move towards") ||
+            lower.includes("follow")
+        ) &&
+        (
+            lower.includes("player") ||
+            lower.includes("nearby") ||
+            lower.includes("close")
+        )
+    ) {
+
+        return {
+
+            target,
+
+            action:
+                "move toward player",
+
+            trigger:
+                "player is nearby",
+
+            code:
+`if (distance(${target}, player) < 10) {
+    ${target}.moveToward(player);
+}`,
+
+            original
+
+        };
+
+    }
+
+
+    /*
+       DISAPPEAR
+    */
+
+    if (
+        lower.includes("disappear") &&
+        (
+            lower.includes("touch") ||
+            lower.includes("hit") ||
+            lower.includes("player")
+        )
+    ) {
+
+        return {
+
+            target,
+
+            action:
+                "disappear",
+
+            trigger:
+                "player touches object",
+
+            code:
+`if (${target}.touching(player)) {
+    ${target}.destroy();
+}`,
+
+            original
+
+        };
+
+    }
+
+
+    /*
+       ROTATE
+    */
+
+    if (
+        lower.includes("rotate") ||
+        lower.includes("spin")
+    ) {
+
+        return {
+
+            target,
+
+            action:
+                "rotate",
+
+            trigger:
+                "every frame",
+
+            code:
+`everyFrame(() => {
+    ${target}.rotate(2);
+});`,
+
+            original
+
+        };
+
+    }
+
+
+    /*
+       GROW
+    */
+
+    if (
+        lower.includes("grow")
+    ) {
+
+        return {
+
+            target,
+
+            action:
+                "grow",
+
+            trigger:
+                "when player is nearby",
+
+            code:
+`if (distance(${target}, player) < 6) {
+    ${target}.scale += 0.01;
+}`,
+
+            original
+
+        };
+
+    }
+
+
+    /*
+       CHANGE COLOR
+    */
+
+    if (
+        lower.includes("change color") ||
+        lower.includes("turn red") ||
+        lower.includes("turn blue") ||
+        lower.includes("turn green")
+    ) {
+
+        let color =
+            "red";
+
+        if (
+            lower.includes("blue")
+        ) {
+            color = "blue";
+        }
+
+        if (
+            lower.includes("green")
+        ) {
+            color = "green";
+        }
+
+        return {
+
+            target,
+
+            action:
+                "change color to " +
+                color,
+
+            trigger:
+                "when player is nearby",
+
+            code:
+`if (distance(${target}, player) < 5) {
+    ${target}.setColor("${color}");
+}`,
+
+            original
+
+        };
+
+    }
+
+
+    /*
+       SAY / MESSAGE
+    */
+
+    if (
+        lower.includes("say") ||
+        lower.includes("says") ||
+        lower.includes("talk")
+    ) {
+
+        return {
+
+            target,
+
+            action:
+                "display message",
+
+            trigger:
+                "when activated",
+
+            code:
+`onActivate(${target}, () => {
+    ${target}.say("Hello!");
+});`,
+
+            original
+
+        };
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =========================================================
+   RULE DISPLAY
+   ========================================================= */
+
+function renderRules() {
+
+    const list =
+        document.getElementById(
+            "ruleList"
+        );
+
+    list.innerHTML = "";
+
+    if (
+        selectedAsset === null ||
+        !assets[selectedAsset]
+    ) {
+
+        return;
+
+    }
+
+    const rules =
+        assets[selectedAsset].rules;
+
+    if (rules.length === 0) {
+
+        list.innerHTML =
+            '<div style="color:#697587;font-size:12px;">No rules yet.</div>';
+
+        return;
+
+    }
+
+    rules.forEach(
+        (rule, index) => {
+
+            const element =
+                document.createElement(
+                    "div"
+                );
+
+            element.className =
+                "rule";
+
+            element.innerHTML = `
+                <button
+                    class="delete-rule"
+                    onclick="deleteRule(${index})">
+                    ×
+                </button>
+
+                <strong>
+                    ${escapeHTML(rule.action)}
+                </strong>
+
+                <br>
+
+                ${escapeHTML(rule.original)}
+
+                <br><br>
+
+                <span style="color:#6ed39d;">
+                    ${escapeHTML(rule.trigger)}
+                </span>
+            `;
+
+            list.appendChild(
+                element
+            );
+
+        }
+    );
+
+}
+
+
+function deleteRule(index) {
+
+    assets[selectedAsset]
+        .rules
+        .splice(index, 1);
+
+    renderRules();
+
+    saveProject();
+
+}
+
+
+/* =========================================================
+   PROJECT SYSTEM
+   ========================================================= */
+
+function saveProject() {
+
+    saveCanvasToAsset();
+
+    localStorage.setItem(
+        "textureforge-project",
+        JSON.stringify(assets)
+    );
+
+    setStatus(
+        "Project saved locally"
+    );
+
+}
+
+
+function exportProject() {
+
+    saveCanvasToAsset();
+
+    const project = {
+
+        engine:
+            "TextureForge AI",
+
+        version:
+            "0.1.0",
+
+        assets
+
+    };
+
+    const blob =
+        new Blob(
+            [
+                JSON.stringify(
+                    project,
+                    null,
+                    2
+                )
+            ],
+            {
+                type:
+                    "application/json"
+            }
+        );
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+    link.href = url;
+
+    link.download =
+        "textureforge-project.json";
+
+    link.click();
+
+    URL.revokeObjectURL(url);
+
+    setStatus(
+        "Project exported"
+    );
+
+}
+
+
+/* =========================================================
+   UI HELPERS
+   ========================================================= */
+
+function setStatus(message) {
+
+    document.getElementById(
+        "status"
+    ).textContent = message;
+
+}
+
+
+function setAIOutput(message) {
+
+    document.getElementById(
+        "aiOutput"
+    ).textContent = message;
+
+}
+
+
+function escapeHTML(text) {
+
+    return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =========================================================
+   START
+   ========================================================= */
+
+initialize();
+
+</script>
+
+</body>
+</html>
