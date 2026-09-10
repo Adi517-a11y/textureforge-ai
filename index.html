@@ -4,1136 +4,949 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TextureForge AI</title>
-
 <style>
 * {
     box-sizing: border-box;
 }
-
+:root {
+    --bg: #f5f7fb;
+    --panel: #ffffff;
+    --line: #e2e7ef;
+    --text: #18202c;
+    --muted: #788397;
+    --blue: #5b7cfa;
+    --purple: #8b5cf6;
+    --green: #24b47e;
+    --shadow: 0 10px 30px rgba(30, 45, 70, .08);
+}
 body {
     margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #11151c;
-    color: white;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     overflow: hidden;
 }
-
 button,
 input,
 textarea,
 select {
     font: inherit;
 }
-
 button {
     cursor: pointer;
 }
-
 .app {
     height: 100vh;
     display: flex;
     flex-direction: column;
 }
-
-/* TOP BAR */
-
-.topbar {
-    height: 58px;
-    background: #1a202a;
-    border-bottom: 1px solid #303846;
+/* HEADER */
+.header {
+    height: 64px;
+    background: white;
+    border-bottom: 1px solid var(--line);
     display: flex;
     align-items: center;
-    padding: 0 16px;
-    gap: 15px;
+    padding: 0 18px;
+    gap: 14px;
+    flex-shrink: 0;
 }
-
-.logo {
-    font-weight: bold;
-    font-size: 19px;
-    color: #8ec5ff;
+.brand {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -.5px;
 }
-
-.project-name {
-    color: #9da8b8;
-    font-size: 14px;
+.brand span {
+    color: var(--purple);
 }
-
-.top-spacer {
+.project {
+    color: var(--muted);
+    font-size: 13px;
+    padding-left: 10px;
+    border-left: 1px solid var(--line);
+}
+.header-space {
     flex: 1;
 }
-
-.top-button {
-    background: #252d39;
-    color: white;
-    border: 1px solid #394454;
-    border-radius: 7px;
+.header-btn {
+    border: 1px solid var(--line);
+    background: white;
     padding: 8px 13px;
+    border-radius: 9px;
+    font-weight: 600;
 }
-
-.top-button:hover {
-    background: #303a49;
+.header-btn:hover {
+    background: #f6f7fb;
 }
-
-/* MAIN */
-
-.main {
+.play-btn {
+    background: var(--text);
+    color: white;
+    border: 0;
+    padding: 9px 17px;
+    border-radius: 9px;
+    font-weight: 700;
+}
+/* WORKSPACE */
+.workspace {
     flex: 1;
-    display: flex;
+    display: grid;
+    grid-template-columns: 220px minmax(350px, 1fr) 330px;
     min-height: 0;
 }
-
-/* LEFT */
-
-.left-panel {
-    width: 245px;
-    background: #171c24;
-    border-right: 1px solid #303846;
+/* ASSETS */
+.assets-panel {
+    background: white;
+    border-right: 1px solid var(--line);
     display: flex;
     flex-direction: column;
+    min-height: 0;
 }
-
-.panel-title {
-    padding: 15px;
-    font-size: 13px;
+.panel-heading {
+    padding: 18px 16px 10px;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--muted);
     text-transform: uppercase;
-    color: #8e99aa;
     letter-spacing: 1px;
 }
-
-.assets {
-    flex: 1;
-    overflow-y: auto;
+.asset-list {
     padding: 8px;
+    overflow-y: auto;
+    flex: 1;
 }
-
 .asset {
     display: flex;
     align-items: center;
     gap: 10px;
     padding: 9px;
-    border-radius: 7px;
-    margin-bottom: 4px;
-    cursor: pointer;
+    border-radius: 10px;
+    margin-bottom: 3px;
 }
-
 .asset:hover {
-    background: #222a35;
+    background: #f4f6fa;
 }
-
 .asset.selected {
-    background: #26364a;
+    background: #eef1ff;
 }
-
-.asset-preview {
+.asset-icon {
     width: 38px;
     height: 38px;
-    border: 1px solid #455161;
-    image-rendering: pixelated;
-    background:
-        linear-gradient(45deg, #ddd 25%, transparent 25%),
-        linear-gradient(-45deg, #ddd 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, #ddd 75%),
-        linear-gradient(-45deg, transparent 75%, #ddd 75%);
-    background-size: 10px 10px;
-    background-position: 0 0, 0 5px, 5px -5px, -5px 0;
-}
-
-.asset-name {
-    font-size: 14px;
-}
-
-.add-asset {
-    margin: 10px;
-    padding: 10px;
-    background: #2878d4;
-    border: none;
-    color: white;
-    border-radius: 7px;
-}
-
-.add-asset:hover {
-    background: #3489e9;
-}
-
-/* CENTER */
-
-.center {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-}
-
-.toolbar {
-    height: 52px;
-    background: #1b212b;
-    border-bottom: 1px solid #303846;
+    border-radius: 9px;
+    border: 1px solid var(--line);
+    background: #f3f5f8;
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
+    overflow: hidden;
+}
+.asset-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    image-rendering: pixelated;
+}
+.asset-icon span {
+    font-size: 19px;
+}
+.asset-name {
+    font-size: 13px;
+    font-weight: 650;
+}
+.new-asset {
+    margin: 10px;
+    border: 0;
+    background: var(--purple);
+    color: white;
+    border-radius: 9px;
+    padding: 11px;
+    font-weight: 700;
+}
+/* EDITOR */
+.editor {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+.editor-tabs {
+    height: 48px;
+    background: white;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 10px;
+}
+.tab {
+    border: 0;
+    background: transparent;
+    padding: 8px 13px;
+    border-radius: 8px;
+    color: var(--muted);
+    font-weight: 650;
+}
+.tab.active {
+    background: #f0f2f8;
+    color: var(--text);
+}
+.editor-content {
+    flex: 1;
+    min-height: 0;
+    position: relative;
+}
+/* PAINT MODE */
+.paint-mode {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.paint-tools {
+    height: 52px;
+    background: white;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: 7px;
     padding: 7px 12px;
 }
-
 .tool {
     width: 38px;
     height: 35px;
-    background: #252d39;
-    color: white;
-    border: 1px solid #3b4656;
-    border-radius: 6px;
+    border: 1px solid var(--line);
+    background: white;
+    border-radius: 8px;
 }
-
 .tool.active {
-    background: #347dc4;
+    background: #eef1ff;
+    border-color: #aab7ff;
 }
-
-.color-input {
+.color {
     width: 40px;
     height: 35px;
-    padding: 2px;
-    border: 1px solid #3b4656;
-    background: #252d39;
+    padding: 3px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: white;
 }
-
-.size-input {
+.brush-size {
     width: 60px;
-    background: #252d39;
-    border: 1px solid #3b4656;
-    color: white;
-    border-radius: 5px;
+    border: 1px solid var(--line);
+    border-radius: 7px;
     padding: 7px;
 }
-
-.canvas-area {
+.paint-area {
     flex: 1;
-    position: relative;
-    overflow: auto;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #10141b;
-
-    background-image:
-        linear-gradient(#1b222c 1px, transparent 1px),
-        linear-gradient(90deg, #1b222c 1px, transparent 1px);
-    background-size: 20px 20px;
+    overflow: auto;
+    background:
+        linear-gradient(45deg, #edf0f5 25%, transparent 25%),
+        linear-gradient(-45deg, #edf0f5 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #edf0f5 75%),
+        linear-gradient(-45deg, transparent 75%, #edf0f5 75%);
+    background-size: 28px 28px;
+    background-position: 0 0, 0 14px, 14px -14px, -14px 0;
 }
-
 #paintCanvas {
-    width: 512px;
-    height: 512px;
-    image-rendering: pixelated;
-    border: 2px solid #536173;
+    width: min(65vh, 520px);
+    height: min(65vh, 520px);
     background: white;
-    cursor: crosshair;
+    border: 2px solid #cbd2df;
+    image-rendering: pixelated;
     touch-action: none;
+    box-shadow: var(--shadow);
 }
-
-.canvas-label {
-    position: absolute;
-    top: 12px;
-    left: 14px;
-    color: #778397;
+/* GAME */
+.game-mode {
+    height: 100%;
+    display: none;
+    flex-direction: column;
+    background: #20252f;
+}
+.game-toolbar {
+    height: 48px;
+    background: #171b23;
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    gap: 9px;
+}
+.game-toolbar button {
+    background: #2a303c;
+    border: 1px solid #3b4352;
+    color: white;
+    border-radius: 7px;
+    padding: 7px 12px;
+}
+.game-status {
+    margin-left: auto;
+    color: #9da7b8;
     font-size: 12px;
-    pointer-events: none;
 }
-
-/* RIGHT */
-
-.right-panel {
-    width: 330px;
-    background: #171c24;
-    border-left: 1px solid #303846;
+.game-area {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+}
+#gameCanvas {
+    width: min(90%, 900px);
+    aspect-ratio: 16 / 9;
+    background: #8ed0ff;
+    image-rendering: auto;
+    border-radius: 8px;
+    box-shadow: 0 15px 50px rgba(0,0,0,.35);
+}
+/* INSPECTOR */
+.inspector {
+    background: white;
+    border-left: 1px solid var(--line);
     display: flex;
     flex-direction: column;
-    min-width: 260px;
+    min-height: 0;
 }
-
 .section {
-    border-bottom: 1px solid #303846;
-    padding: 14px;
+    padding: 15px;
+    border-bottom: 1px solid var(--line);
 }
-
 .section-title {
-    color: #9ba6b7;
-    font-size: 12px;
+    color: var(--muted);
     text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 10px;
+    letter-spacing: .8px;
+    font-size: 11px;
+    font-weight: 800;
+    margin-bottom: 9px;
 }
-
 .name-input {
     width: 100%;
-    background: #222934;
-    color: white;
-    border: 1px solid #3a4656;
-    border-radius: 6px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
     padding: 9px;
+    outline: none;
 }
-
-.ai-box {
+.name-input:focus,
+.ai-input:focus {
+    border-color: #9eabff;
+}
+.ai-section {
     flex: 1;
     min-height: 0;
     display: flex;
     flex-direction: column;
 }
-
 .ai-input {
     width: 100%;
-    min-height: 100px;
+    min-height: 115px;
     resize: vertical;
-    background: #11161d;
-    border: 1px solid #3b4656;
-    border-radius: 7px;
-    color: white;
+    border: 1px solid var(--line);
+    border-radius: 9px;
     padding: 10px;
     outline: none;
+    line-height: 1.45;
 }
-
-.ai-input:focus {
-    border-color: #4c91df;
-}
-
-.run-ai {
+.ai-run {
     margin-top: 8px;
-    width: 100%;
-    background: #7b4ed4;
+    border: 0;
+    border-radius: 9px;
+    background: linear-gradient(135deg, var(--purple), #6078f8);
     color: white;
-    border: none;
-    border-radius: 7px;
-    padding: 10px;
+    padding: 11px;
+    font-weight: 750;
 }
-
-.run-ai:hover {
-    background: #8c5be7;
-}
-
-.ai-output {
-    margin-top: 10px;
+.ai-result {
+    margin-top: 9px;
+    background: #f6f7fa;
+    border-radius: 8px;
     padding: 10px;
-    background: #10151c;
-    border: 1px solid #303a49;
-    border-radius: 7px;
-    font-size: 12px;
+    color: #657084;
+    font-size: 11px;
     line-height: 1.5;
-    color: #b9c4d4;
-    overflow-y: auto;
-    max-height: 150px;
+    max-height: 160px;
+    overflow: auto;
 }
-
-.rule-list {
-    max-height: 180px;
+.rules {
+    max-height: 190px;
     overflow-y: auto;
 }
-
 .rule {
-    background: #202732;
-    border: 1px solid #303b4a;
-    border-radius: 6px;
+    background: #f7f8fb;
+    border: 1px solid var(--line);
     padding: 9px;
+    border-radius: 8px;
     margin-bottom: 6px;
-    font-size: 12px;
-}
-
-.rule strong {
-    color: #a9d3ff;
-}
-
-.delete-rule {
-    float: right;
-    background: transparent;
-    color: #ff7777;
-    border: none;
-}
-
-/* BOTTOM */
-
-.statusbar {
-    height: 30px;
-    background: #202630;
-    border-top: 1px solid #303846;
-    display: flex;
-    align-items: center;
-    padding: 0 12px;
-    gap: 20px;
-    color: #8d99aa;
     font-size: 11px;
 }
-
-.green {
-    color: #65d69b;
+.rule-top {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 750;
 }
-
+.rule-action {
+    color: var(--purple);
+}
+.delete-rule {
+    border: 0;
+    background: transparent;
+    color: #d35b68;
+}
+/* STATUS */
+.statusbar {
+    height: 28px;
+    background: white;
+    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 0 12px;
+    color: var(--muted);
+    font-size: 10px;
+}
+.status-online {
+    color: var(--green);
+}
+/* MOBILE */
 @media(max-width: 900px) {
-
-    .left-panel {
-        width: 180px;
+    .workspace {
+        grid-template-columns: 170px minmax(300px, 1fr) 280px;
     }
-
-    .right-panel {
-        width: 280px;
-    }
-
 }
-
 @media(max-width: 700px) {
-
-    .left-panel {
+    .workspace {
+        grid-template-columns: 1fr;
+    }
+    .assets-panel,
+    .inspector {
         display: none;
     }
-
-    .right-panel {
-        width: 270px;
-    }
-
     #paintCanvas {
-        width: 380px;
-        height: 380px;
+        width: 82vw;
+        height: 82vw;
     }
-
 }
 </style>
 </head>
-
 <body>
-
 <div class="app">
-
-    <div class="topbar">
-
-        <div class="logo">
-            TextureForge AI
-        </div>
-
-        <div class="project-name">
-            Game Project
-        </div>
-
-        <div class="top-spacer"></div>
-
-        <button class="top-button" onclick="saveProject()">
-            Save
-        </button>
-
-        <button class="top-button" onclick="exportProject()">
-            Export
-        </button>
-
+<header class="header">
+    <div class="brand">
+        Texture<span>Forge</span> AI
     </div>
-
-
-    <div class="main">
-
-        <!-- LEFT ASSET PANEL -->
-
-        <aside class="left-panel">
-
-            <div class="panel-title">
-                Assets
-            </div>
-
-            <div id="assetList" class="assets"></div>
-
-            <button class="add-asset" onclick="createAsset()">
-                + New Asset
-            </button>
-
-        </aside>
-
-
-        <!-- CENTER EDITOR -->
-
-        <main class="center">
-
-            <div class="toolbar">
-
-                <button id="pencilTool"
-                        class="tool active"
-                        onclick="setTool('pencil')">
+    <div class="project">
+        Untitled Game
+    </div>
+    <div class="header-space"></div>
+    <button class="header-btn" onclick="saveProject()">
+        Save
+    </button>
+    <button class="header-btn" onclick="exportProject()">
+        Export
+    </button>
+    <button class="play-btn" onclick="toggleGame()">
+        ▶ Play
+    </button>
+</header>
+<div class="workspace">
+<!-- =====================================================
+     ASSETS
+===================================================== -->
+<aside class="assets-panel">
+    <div class="panel-heading">
+        Assets
+    </div>
+    <div id="assetList" class="asset-list"></div>
+    <button class="new-asset" onclick="createAsset()">
+        + Create Asset
+    </button>
+</aside>
+<!-- =====================================================
+     EDITOR
+===================================================== -->
+<main class="editor">
+    <div class="editor-tabs">
+        <button
+            id="paintTab"
+            class="tab active"
+            onclick="showPaint()">
+            Paint
+        </button>
+        <button
+            id="gameTab"
+            class="tab"
+            onclick="showGame()">
+            Game Preview
+        </button>
+    </div>
+    <div class="editor-content">
+        <!-- PAINT -->
+        <div id="paintMode" class="paint-mode">
+            <div class="paint-tools">
+                <button
+                    class="tool active"
+                    onclick="setTool('pencil')">
                     ✎
                 </button>
-
-                <button class="tool"
-                        onclick="setTool('eraser')">
+                <button
+                    class="tool"
+                    onclick="setTool('eraser')">
                     ⌫
                 </button>
-
-                <button class="tool"
-                        onclick="clearCanvas()">
-                    □
+                <button
+                    class="tool"
+                    onclick="clearCanvas()">
+                    Clear
                 </button>
-
                 <input
                     id="colorPicker"
-                    class="color-input"
+                    class="color"
                     type="color"
-                    value="#222222"
-                >
-
+                    value="#222222">
                 <input
                     id="brushSize"
-                    class="size-input"
+                    class="brush-size"
                     type="number"
                     min="1"
                     max="80"
-                    value="8"
-                >
-
+                    value="10">
             </div>
-
-
-            <div class="canvas-area">
-
-                <div class="canvas-label">
-                    Texture Painter — 512 × 512
-                </div>
-
+            <div class="paint-area">
                 <canvas
                     id="paintCanvas"
                     width="512"
                     height="512">
                 </canvas>
-
             </div>
-
-        </main>
-
-
-        <!-- RIGHT PANEL -->
-
-        <aside class="right-panel">
-
-            <div class="section">
-
-                <div class="section-title">
-                    Asset
-                </div>
-
-                <input
-                    id="assetName"
-                    class="name-input"
-                    value="NewAsset"
-                    placeholder="Asset name"
-                    oninput="renameAsset()"
-                >
-
-            </div>
-
-
-            <div class="section ai-box">
-
-                <div class="section-title">
-                    AI Code
-                </div>
-
-                <textarea
-                    id="aiInput"
-                    class="ai-input"
-                    placeholder="Describe what should happen...
-
-Example:
-Penguin jump if player is close
-
-Or:
-Penguin move toward player when player is nearby
-
-Or:
-Penguin disappear when player touches Penguin"></textarea>
-
-                <button
-                    class="run-ai"
-                    onclick="runAI()">
-                    ✦ Make Code Work
+        </div>
+        <!-- GAME -->
+        <div id="gameMode" class="game-mode">
+            <div class="game-toolbar">
+                <button onclick="startGame()">
+                    ▶ Start
                 </button>
-
-                <div id="aiOutput" class="ai-output">
-                    AI ready.
+                <button onclick="stopGame()">
+                    ■ Stop
+                </button>
+                <button onclick="resetGame()">
+                    ↻ Reset
+                </button>
+                <div class="game-status" id="gameStatus">
+                    Game stopped
                 </div>
-
             </div>
-
-
-            <div class="section">
-
-                <div class="section-title">
-                    Active Rules
-                </div>
-
-                <div
-                    id="ruleList"
-                    class="rule-list">
-                </div>
-
+            <div class="game-area">
+                <canvas
+                    id="gameCanvas"
+                    width="900"
+                    height="506">
+                </canvas>
             </div>
-
-        </aside>
-
+        </div>
     </div>
-
-
-    <div class="statusbar">
-
-        <span>
-            TextureForge AI
-        </span>
-
-        <span id="status">
-            Ready
-        </span>
-
-        <span class="green">
-            ● Local
-        </span>
-
+</main>
+<!-- =====================================================
+     INSPECTOR
+===================================================== -->
+<aside class="inspector">
+    <div class="section">
+        <div class="section-title">
+            Selected Asset
+        </div>
+        <input
+            id="assetName"
+            class="name-input"
+            value="Penguin"
+            oninput="renameAsset()">
     </div>
-
+    <div class="section ai-section">
+        <div class="section-title">
+            AI Behavior
+        </div>
+        <textarea
+            id="aiInput"
+            class="ai-input"
+            placeholder="Tell the AI what the object should do.
+Examples:
+Penguin jump if player is close
+Penguin follow player
+Penguin patrol left and right
+Penguin disappear when player touches Penguin
+Penguin chase player if player is nearby
+Penguin lose 10 health when player attacks"></textarea>
+        <button
+            class="ai-run"
+            onclick="runAI()">
+            ✦ Make Behavior Work
+        </button>
+        <div
+            id="aiResult"
+            class="ai-result">
+            AI behavior engine ready.
+        </div>
+    </div>
+    <div class="section">
+        <div class="section-title">
+            Behaviors
+        </div>
+        <div
+            id="ruleList"
+            class="rules">
+        </div>
+    </div>
+</aside>
 </div>
-
-
+<div class="statusbar">
+    <span>
+        TextureForge AI 0.2.0
+    </span>
+    <span id="status">
+        Ready
+    </span>
+    <span class="status-online">
+        ● Engine Ready
+    </span>
+</div>
+</div>
 <script>
-
 /* =========================================================
-   TEXTUREFORGE AI
-   ========================================================= */
-
-const canvas = document.getElementById("paintCanvas");
-const ctx = canvas.getContext("2d");
-
-let drawing = false;
-let tool = "pencil";
-
+   PROJECT DATA
+========================================================= */
 let assets = [];
-
-let selectedAsset = null;
-
-
+let selectedAsset = 0;
+let currentTool = "pencil";
+let drawing = false;
+let gameRunning = false;
+let gameObjects = [];
+let lastTime = 0;
 /* =========================================================
-   INITIALIZE
-   ========================================================= */
-
-function initialize() {
-
-    const saved = localStorage.getItem("textureforge-project");
-
-    if (saved) {
-
-        try {
-
-            assets = JSON.parse(saved);
-
-        } catch {
-
-            assets = [];
-
-        }
-
-    }
-
-    if (assets.length === 0) {
-
-        assets.push({
-            name: "Penguin",
-            texture: null,
-            rules: []
-        });
-
-    }
-
-    selectedAsset = 0;
-
-    renderAssets();
-    loadAsset();
-
-    setStatus("Ready");
-
-}
-
-
-/* =========================================================
-   CANVAS
-   ========================================================= */
-
-function resetCanvas() {
-
-    ctx.fillStyle = "#ffffff";
-
-    ctx.fillRect(
+   CANVAS PAINTER
+========================================================= */
+const paintCanvas =
+    document.getElementById("paintCanvas");
+const paintCtx =
+    paintCanvas.getContext("2d");
+function blankTexture() {
+    paintCtx.fillStyle = "#ffffff";
+    paintCtx.fillRect(
         0,
         0,
-        canvas.width,
-        canvas.height
+        paintCanvas.width,
+        paintCanvas.height
     );
-
 }
-
-
-function loadAsset() {
-
-    if (
-        selectedAsset === null ||
-        !assets[selectedAsset]
-    ) {
-        return;
-    }
-
-    const asset = assets[selectedAsset];
-
-    document.getElementById("assetName").value =
-        asset.name;
-
-    resetCanvas();
-
-    if (asset.texture) {
-
-        const image = new Image();
-
-        image.onload = function() {
-
-            ctx.clearRect(
-                0,
-                0,
-                canvas.width,
-                canvas.height
-            );
-
-            ctx.drawImage(
-                image,
-                0,
-                0
-            );
-
-        };
-
-        image.src = asset.texture;
-
-    }
-
-    renderRules();
-
-}
-
-
-function saveCanvasToAsset() {
-
-    if (
-        selectedAsset === null ||
-        !assets[selectedAsset]
-    ) {
-        return;
-    }
-
-    assets[selectedAsset].texture =
-        canvas.toDataURL("image/png");
-
-}
-
-
-/* =========================================================
-   PAINTING
-   ========================================================= */
-
-function getMousePosition(event) {
-
+function getPaintPosition(e) {
     const rect =
-        canvas.getBoundingClientRect();
-
-    const scaleX =
-        canvas.width / rect.width;
-
-    const scaleY =
-        canvas.height / rect.height;
-
+        paintCanvas.getBoundingClientRect();
     return {
         x:
-            (event.clientX - rect.left) *
-            scaleX,
-
+            (e.clientX - rect.left) *
+            paintCanvas.width /
+            rect.width,
         y:
-            (event.clientY - rect.top) *
-            scaleY
+            (e.clientY - rect.top) *
+            paintCanvas.height /
+            rect.height
     };
-
 }
-
-
-function startDrawing(event) {
-
-    drawing = true;
-
-    draw(event);
-
-}
-
-
-function stopDrawing() {
-
+function paint(e) {
     if (!drawing) return;
-
-    drawing = false;
-
-    saveCanvasToAsset();
-
-}
-
-
-function draw(event) {
-
-    if (!drawing) return;
-
-    const pos =
-        getMousePosition(event);
-
+    const p =
+        getPaintPosition(e);
     const size =
         Number(
             document.getElementById(
                 "brushSize"
             ).value
         );
-
-    ctx.lineWidth = size;
-
-    ctx.lineCap = "round";
-
-    if (tool === "eraser") {
-
-        ctx.globalCompositeOperation =
+    paintCtx.lineWidth = size;
+    paintCtx.lineCap = "round";
+    if (currentTool === "eraser") {
+        paintCtx.globalCompositeOperation =
             "destination-out";
-
     } else {
-
-        ctx.globalCompositeOperation =
+        paintCtx.globalCompositeOperation =
             "source-over";
-
-        ctx.strokeStyle =
+        paintCtx.strokeStyle =
             document.getElementById(
                 "colorPicker"
             ).value;
-
     }
-
-    ctx.lineTo(
-        pos.x,
-        pos.y
-    );
-
-    ctx.stroke();
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-        pos.x,
-        pos.y
-    );
-
+    paintCtx.lineTo(p.x, p.y);
+    paintCtx.stroke();
+    paintCtx.beginPath();
+    paintCtx.moveTo(p.x, p.y);
 }
-
-
-canvas.addEventListener(
+paintCanvas.addEventListener(
     "pointerdown",
-    startDrawing
-);
-
-canvas.addEventListener(
-    "pointermove",
-    draw
-);
-
-canvas.addEventListener(
-    "pointerup",
-    stopDrawing
-);
-
-canvas.addEventListener(
-    "pointercancel",
-    stopDrawing
-);
-
-canvas.addEventListener(
-    "pointerleave",
-    stopDrawing
-);
-
-
-function setTool(newTool) {
-
-    tool = newTool;
-
-    document
-        .querySelectorAll(".tool")
-        .forEach(button => {
-
-            button.classList.remove(
-                "active"
-            );
-
-        });
-
-}
-
-
-function clearCanvas() {
-
-    resetCanvas();
-
-    saveCanvasToAsset();
-
-}
-
-
-/* =========================================================
-   ASSETS
-   ========================================================= */
-
-function createAsset() {
-
-    const name =
-        prompt(
-            "Enter the asset name:",
-            "NewAsset"
+    e => {
+        drawing = true;
+        const p =
+            getPaintPosition(e);
+        paintCtx.beginPath();
+        paintCtx.moveTo(
+            p.x,
+            p.y
         );
-
-    if (!name) return;
-
-    assets.push({
-
-        name:
-            cleanName(name),
-
-        texture:
-            null,
-
-        rules:
-            []
-
-    });
-
-    selectedAsset =
-        assets.length - 1;
-
-    renderAssets();
-
-    loadAsset();
-
+        paint(e);
+    }
+);
+paintCanvas.addEventListener(
+    "pointermove",
+    paint
+);
+paintCanvas.addEventListener(
+    "pointerup",
+    finishPaint
+);
+paintCanvas.addEventListener(
+    "pointercancel",
+    finishPaint
+);
+function finishPaint() {
+    drawing = false;
+    paintCtx.beginPath();
+    saveCurrentTexture();
 }
-
-
+function saveCurrentTexture() {
+    if (!assets[selectedAsset]) return;
+    assets[selectedAsset].texture =
+        paintCanvas.toDataURL(
+            "image/png"
+        );
+    renderAssets();
+}
+function clearCanvas() {
+    blankTexture();
+    saveCurrentTexture();
+}
+function setTool(tool) {
+    currentTool = tool;
+}
+/* =========================================================
+   ASSET SYSTEM
+========================================================= */
 function cleanName(name) {
-
     return name
         .trim()
         .replace(/\s+/g, "_")
-        .replace(/[^a-zA-Z0-9_]/g, "");
-
+        .replace(
+            /[^a-zA-Z0-9_]/g,
+            ""
+        ) || "Asset";
 }
-
-
+function createAsset() {
+    const name =
+        prompt(
+            "Name your new asset:",
+            "Penguin"
+        );
+    if (!name) return;
+    assets.push({
+        name:
+            cleanName(name),
+        texture:
+            null,
+        rules: [],
+        properties: {
+            health: 100,
+            speed: 2,
+            jumpPower: 8,
+            gravity: true,
+            solid: true
+        }
+    });
+    selectedAsset =
+        assets.length - 1;
+    blankTexture();
+    renderAssets();
+    renderRules();
+    setStatus(
+        "Created " +
+        assets[selectedAsset].name
+    );
+}
 function renameAsset() {
-
-    if (
-        selectedAsset === null ||
-        !assets[selectedAsset]
-    ) {
-        return;
-    }
-
-    let name =
-        document.getElementById(
-            "assetName"
-        ).value;
-
+    if (!assets[selectedAsset]) return;
     assets[selectedAsset].name =
-        cleanName(name);
-
+        cleanName(
+            document.getElementById(
+                "assetName"
+            ).value
+        );
     renderAssets();
-
 }
-
-
 function selectAsset(index) {
-
-    saveCanvasToAsset();
-
+    saveCurrentTexture();
     selectedAsset = index;
-
+    loadTexture();
     renderAssets();
-
-    loadAsset();
-
+    renderRules();
 }
-
-
 function renderAssets() {
-
     const list =
         document.getElementById(
             "assetList"
         );
-
     list.innerHTML = "";
-
     assets.forEach(
         (asset, index) => {
-
-            const element =
+            const item =
                 document.createElement(
                     "div"
                 );
-
-            element.className =
+            item.className =
                 "asset" +
                 (
                     index === selectedAsset
                     ? " selected"
                     : ""
                 );
-
-            const preview =
+            const icon =
                 document.createElement(
                     "div"
                 );
-
-            preview.className =
-                "asset-preview";
-
+            icon.className =
+                "asset-icon";
             if (asset.texture) {
-
-                preview.style.backgroundImage =
-                    `url(${asset.texture})`;
-
-                preview.style.backgroundSize =
-                    "cover";
-
+                const img =
+                    document.createElement(
+                        "img"
+                    );
+                img.src =
+                    asset.texture;
+                icon.appendChild(img);
+            } else {
+                const emoji =
+                    document.createElement(
+                        "span"
+                    );
+                emoji.textContent = "◆";
+                icon.appendChild(emoji);
             }
-
             const name =
                 document.createElement(
                     "div"
                 );
-
             name.className =
                 "asset-name";
-
             name.textContent =
                 asset.name;
-
-            element.appendChild(preview);
-
-            element.appendChild(name);
-
-            element.onclick =
+            item.appendChild(icon);
+            item.appendChild(name);
+            item.onclick =
                 () => selectAsset(index);
-
-            list.appendChild(element);
-
+            list.appendChild(item);
         }
     );
-
 }
-
-
+function loadTexture() {
+    blankTexture();
+    if (!assets[selectedAsset]) return;
+    document.getElementById(
+        "assetName"
+    ).value =
+        assets[selectedAsset].name;
+    const texture =
+        assets[selectedAsset].texture;
+    if (!texture) return;
+    const image =
+        new Image();
+    image.onload = () => {
+        paintCtx.clearRect(
+            0,
+            0,
+            512,
+            512
+        );
+        paintCtx.drawImage(
+            image,
+            0,
+            0
+        );
+    };
+    image.src = texture;
+}
 /* =========================================================
-   NATURAL LANGUAGE AI
-   ========================================================= */
-
+   AI RULE ENGINE
+========================================================= */
 function runAI() {
-
-    const input =
+    const text =
         document.getElementById(
             "aiInput"
         ).value.trim();
-
-    if (!input) {
-
-        setAIOutput(
-            "Describe a behavior first."
-        );
-
-        return;
-
-    }
-
+    if (!text) return;
     const result =
-        interpretCommand(input);
-
+        understand(text);
     if (!result) {
-
-        setAIOutput(
-            "I couldn't understand that rule yet.\n\n" +
-            "Try something like:\n" +
-            "Penguin jump if player is close\n\n" +
-            "Penguin move toward player when player is nearby\n\n" +
-            "Penguin disappear when player touches Penguin"
+        showAI(
+            "I don't know that behavior yet.\n\n" +
+            "Try:\n" +
+            "Penguin jump if player is close\n" +
+            "Penguin follow player\n" +
+            "Penguin patrol\n" +
+            "Penguin disappear when player touches Penguin\n" +
+            "Penguin move left\n" +
+            "Penguin move right\n" +
+            "Penguin bounce"
         );
-
         return;
-
     }
-
-    assets[selectedAsset].rules.push(result);
-
+    const asset =
+        findAsset(result.target);
+    if (!asset) {
+        showAI(
+            "I couldn't find an asset named " +
+            result.target +
+            ". Create or rename an asset first."
+        );
+        return;
+    }
+    asset.rules.push(result);
     renderRules();
-
-    setAIOutput(
-        "✓ Rule understood.\n\n" +
+    saveProject();
+    showAI(
+        "✓ Behavior created\n\n" +
         "Object: " +
         result.target +
         "\n" +
-        "Action: " +
-        result.action +
-        "\n" +
         "Trigger: " +
         result.trigger +
+        "\n" +
+        "Action: " +
+        result.action +
         "\n\n" +
-        "Generated behavior code:\n" +
+        "Generated runtime logic:\n" +
         result.code
     );
-
-    saveProject();
-
 }
-
-
-/* =========================================================
-   COMMAND INTERPRETER
-   ========================================================= */
-
-function interpretCommand(text) {
-
-    const original =
-        text.trim();
-
+function findAsset(name) {
+    return assets.find(
+        a =>
+            a.name.toLowerCase() ===
+            name.toLowerCase()
+    );
+}
+function detectTarget(text) {
     const lower =
-        original.toLowerCase();
-
-    let target =
-        assets[selectedAsset].name;
-
-    /*
-       Find an asset name in the command.
-    */
-
+        text.toLowerCase();
     for (const asset of assets) {
-
         if (
             lower.includes(
                 asset.name.toLowerCase()
             )
         ) {
-
-            target =
-                asset.name;
-
-            break;
-
+            return asset.name;
         }
-
     }
-
-
-    /*
-       JUMP
-    */
-
+    return assets[selectedAsset]
+        ?.name || "Player";
+}
+function understand(text) {
+    const lower =
+        text.toLowerCase();
+    const target =
+        detectTarget(text);
+    /* JUMP NEAR PLAYER */
     if (
         lower.includes("jump") &&
         (
@@ -1142,376 +955,1088 @@ function interpretCommand(text) {
             lower.includes("nearby")
         )
     ) {
-
         return {
-
             target,
-
+            trigger:
+                "player is nearby",
             action:
                 "jump",
-
-            trigger:
-                "player is nearby",
-
             code:
-`if (distance(${target}, player) < 5) {
+`if (distance(${target}, player) < 150) {
     ${target}.jump();
 }`,
-
-            original
-
+            type:
+                "jumpNear"
         };
-
     }
-
-
-    /*
-       MOVE TOWARD PLAYER
-    */
-
+    /* FOLLOW */
     if (
-        (
-            lower.includes("move toward") ||
-            lower.includes("move towards") ||
-            lower.includes("follow")
-        ) &&
-        (
-            lower.includes("player") ||
-            lower.includes("nearby") ||
-            lower.includes("close")
-        )
+        lower.includes("follow") ||
+        lower.includes("follow player") ||
+        lower.includes("move toward player") ||
+        lower.includes("move towards player")
     ) {
-
         return {
-
             target,
-
-            action:
-                "move toward player",
-
             trigger:
                 "player is nearby",
-
+            action:
+                "follow player",
             code:
-`if (distance(${target}, player) < 10) {
+`if (distance(${target}, player) < 350) {
     ${target}.moveToward(player);
 }`,
-
-            original
-
+            type:
+                "follow"
         };
-
     }
-
-
-    /*
-       DISAPPEAR
-    */
-
+    /* CHASE */
+    if (
+        lower.includes("chase") &&
+        lower.includes("player")
+    ) {
+        return {
+            target,
+            trigger:
+                "player detected",
+            action:
+                "chase player",
+            code:
+`if (distance(${target}, player) < 300) {
+    ${target}.chase(player);
+}`,
+            type:
+                "chase"
+        };
+    }
+    /* PATROL */
+    if (
+        lower.includes("patrol") ||
+        lower.includes("walk left and right") ||
+        lower.includes("move left and right")
+    ) {
+        return {
+            target,
+            trigger:
+                "always",
+            action:
+                "patrol",
+            code:
+`everyFrame(() => {
+    ${target}.patrol();
+});`,
+            type:
+                "patrol"
+        };
+    }
+    /* MOVE LEFT */
+    if (
+        lower.includes("move left") ||
+        lower.includes("go left")
+    ) {
+        return {
+            target,
+            trigger:
+                "always",
+            action:
+                "move left",
+            code:
+`everyFrame(() => {
+    ${target}.velocityX = -2;
+});`,
+            type:
+                "left"
+        };
+    }
+    /* MOVE RIGHT */
+    if (
+        lower.includes("move right") ||
+        lower.includes("go right")
+    ) {
+        return {
+            target,
+            trigger:
+                "always",
+            action:
+                "move right",
+            code:
+`everyFrame(() => {
+    ${target}.velocityX = 2;
+});`,
+            type:
+                "right"
+        };
+    }
+    /* DISAPPEAR */
     if (
         lower.includes("disappear") &&
         (
             lower.includes("touch") ||
-            lower.includes("hit") ||
             lower.includes("player")
         )
     ) {
-
         return {
-
             target,
-
-            action:
-                "disappear",
-
             trigger:
                 "player touches object",
-
+            action:
+                "disappear",
             code:
 `if (${target}.touching(player)) {
     ${target}.destroy();
 }`,
-
-            original
-
+            type:
+                "destroyTouch"
         };
-
     }
-
-
-    /*
-       ROTATE
-    */
-
+    /* BOUNCE */
+    if (
+        lower.includes("bounce")
+    ) {
+        return {
+            target,
+            trigger:
+                "when touching ground",
+            action:
+                "bounce",
+            code:
+`if (${target}.onGround) {
+    ${target}.velocityY = -8;
+}`,
+            type:
+                "bounce"
+        };
+    }
+    /* ROTATE */
     if (
         lower.includes("rotate") ||
         lower.includes("spin")
     ) {
-
         return {
-
             target,
-
+            trigger:
+                "always",
             action:
                 "rotate",
-
-            trigger:
-                "every frame",
-
             code:
 `everyFrame(() => {
-    ${target}.rotate(2);
+    ${target}.rotation += 2;
 });`,
-
-            original
-
+            type:
+                "rotate"
         };
-
     }
-
-
-    /*
-       GROW
-    */
-
+    /* GROW */
     if (
         lower.includes("grow")
     ) {
-
         return {
-
             target,
-
+            trigger:
+                "player nearby",
             action:
                 "grow",
-
-            trigger:
-                "when player is nearby",
-
             code:
-`if (distance(${target}, player) < 6) {
+`if (distance(${target}, player) < 180) {
     ${target}.scale += 0.01;
 }`,
-
-            original
-
+            type:
+                "grow"
         };
-
     }
-
-
-    /*
-       CHANGE COLOR
-    */
-
+    /* SHRINK */
     if (
-        lower.includes("change color") ||
-        lower.includes("turn red") ||
-        lower.includes("turn blue") ||
-        lower.includes("turn green")
+        lower.includes("shrink") ||
+        lower.includes("get smaller")
     ) {
-
-        let color =
-            "red";
-
-        if (
-            lower.includes("blue")
-        ) {
-            color = "blue";
-        }
-
-        if (
-            lower.includes("green")
-        ) {
-            color = "green";
-        }
-
         return {
-
             target,
-
-            action:
-                "change color to " +
-                color,
-
             trigger:
-                "when player is nearby",
-
+                "player nearby",
+            action:
+                "shrink",
             code:
-`if (distance(${target}, player) < 5) {
-    ${target}.setColor("${color}");
+`if (distance(${target}, player) < 180) {
+    ${target}.scale -= 0.01;
 }`,
-
-            original
-
+            type:
+                "shrink"
         };
-
     }
-
-
-    /*
-       SAY / MESSAGE
-    */
-
+    /* HEALTH */
     if (
-        lower.includes("say") ||
-        lower.includes("says") ||
-        lower.includes("talk")
+        lower.includes("lose") &&
+        lower.includes("health")
     ) {
-
+        const match =
+            lower.match(
+                /lose\s+(\d+)\s+health/
+            );
+        const amount =
+            match
+            ? Number(match[1])
+            : 10;
         return {
-
             target,
-
-            action:
-                "display message",
-
             trigger:
-                "when activated",
-
+                "player attacks object",
+            action:
+                "lose " +
+                amount +
+                " health",
             code:
-`onActivate(${target}, () => {
-    ${target}.say("Hello!");
-});`,
-
-            original
-
+`if (${target}.attacked) {
+    ${target}.health -= ${amount};
+}`,
+            type:
+                "damage",
+            amount
         };
-
     }
-
-
+    /* EXPLODE */
+    if (
+        lower.includes("explode") ||
+        lower.includes("explodes")
+    ) {
+        return {
+            target,
+            trigger:
+                "player touches object",
+            action:
+                "explode",
+            code:
+`if (${target}.touching(player)) {
+    ${target}.explode();
+}`,
+            type:
+                "explode"
+        };
+    }
+    /* TELEPORT */
+    if (
+        lower.includes("teleport")
+    ) {
+        return {
+            target,
+            trigger:
+                "player gets close",
+            action:
+                "teleport",
+            code:
+`if (distance(${target}, player) < 120) {
+    ${target}.teleport(randomPosition());
+}`,
+            type:
+                "teleport"
+        };
+    }
+    /* STOP */
+    if (
+        lower.includes("stop") &&
+        (
+            lower.includes("moving") ||
+            lower.includes("move")
+        )
+    ) {
+        return {
+            target,
+            trigger:
+                "player gets close",
+            action:
+                "stop moving",
+            code:
+`if (distance(${target}, player) < 100) {
+    ${target}.velocityX = 0;
+    ${target}.velocityY = 0;
+}`,
+            type:
+                "stop"
+        };
+    }
     return null;
-
 }
-
-
 /* =========================================================
-   RULE DISPLAY
-   ========================================================= */
-
+   RULE UI
+========================================================= */
 function renderRules() {
-
     const list =
         document.getElementById(
             "ruleList"
         );
-
     list.innerHTML = "";
-
-    if (
-        selectedAsset === null ||
-        !assets[selectedAsset]
-    ) {
-
-        return;
-
-    }
-
-    const rules =
-        assets[selectedAsset].rules;
-
-    if (rules.length === 0) {
-
+    const asset =
+        assets[selectedAsset];
+    if (!asset || asset.rules.length === 0) {
         list.innerHTML =
-            '<div style="color:#697587;font-size:12px;">No rules yet.</div>';
-
+            `<div style="color:#8993a5;font-size:11px;">
+                No behaviors yet.
+            </div>`;
         return;
-
     }
-
-    rules.forEach(
+    asset.rules.forEach(
         (rule, index) => {
-
-            const element =
+            const div =
                 document.createElement(
                     "div"
                 );
-
-            element.className =
-                "rule";
-
-            element.innerHTML = `
-                <button
-                    class="delete-rule"
-                    onclick="deleteRule(${index})">
-                    ×
-                </button>
-
-                <strong>
-                    ${escapeHTML(rule.action)}
-                </strong>
-
-                <br>
-
-                ${escapeHTML(rule.original)}
-
-                <br><br>
-
-                <span style="color:#6ed39d;">
+            div.className = "rule";
+            div.innerHTML = `
+                <div class="rule-top">
+                    <span class="rule-action">
+                        ${escapeHTML(rule.action)}
+                    </span>
+                    <button
+                        class="delete-rule"
+                        onclick="deleteRule(${index})">
+                        ×
+                    </button>
+                </div>
+                <div style="margin-top:4px;">
                     ${escapeHTML(rule.trigger)}
-                </span>
+                </div>
             `;
-
-            list.appendChild(
-                element
-            );
-
+            list.appendChild(div);
         }
     );
-
 }
-
-
 function deleteRule(index) {
-
     assets[selectedAsset]
         .rules
         .splice(index, 1);
-
     renderRules();
-
     saveProject();
-
 }
-
-
 /* =========================================================
-   PROJECT SYSTEM
-   ========================================================= */
-
-function saveProject() {
-
-    saveCanvasToAsset();
-
-    localStorage.setItem(
-        "textureforge-project",
-        JSON.stringify(assets)
+   GAME ENGINE
+========================================================= */
+const gameCanvas =
+    document.getElementById(
+        "gameCanvas"
     );
-
-    setStatus(
-        "Project saved locally"
+const gameCtx =
+    gameCanvas.getContext("2d");
+const player = {
+    x: 450,
+    y: 350,
+    width: 35,
+    height: 45,
+    velocityX: 0,
+    velocityY: 0,
+    speed: 3.5,
+    jumpPower: 10,
+    onGround: false
+};
+const keys = {};
+window.addEventListener(
+    "keydown",
+    e => {
+        keys[e.key.toLowerCase()] = true;
+    }
+);
+window.addEventListener(
+    "keyup",
+    e => {
+        keys[e.key.toLowerCase()] = false;
+    }
+);
+function buildGameObjects() {
+    gameObjects = [];
+    assets.forEach(
+        (asset, index) => {
+            if (index === selectedAsset) {
+                gameObjects.push({
+                    asset,
+                    x:
+                        180 +
+                        index * 110,
+                    y:
+                        300,
+                    width:
+                        55,
+                    height:
+                        55,
+                    velocityX: 0,
+                    velocityY: 0,
+                    rotation: 0,
+                    scale: 1,
+                    health:
+                        asset.properties.health,
+                    visible: true,
+                    direction: 1,
+                    animationTime: 0,
+                    patrolStart:
+                        150,
+                    patrolEnd:
+                        700
+                });
+            }
+        }
     );
-
 }
-
-
+function startGame() {
+    if (gameRunning) return;
+    gameRunning = true;
+    buildGameObjects();
+    player.x = 450;
+    player.y = 350;
+    player.velocityX = 0;
+    player.velocityY = 0;
+    document.getElementById(
+        "gameStatus"
+    ).textContent =
+        "Game running";
+    lastTime =
+        performance.now();
+    requestAnimationFrame(
+        gameLoop
+    );
+}
+function stopGame() {
+    gameRunning = false;
+    document.getElementById(
+        "gameStatus"
+    ).textContent =
+        "Game stopped";
+}
+function resetGame() {
+    buildGameObjects();
+    player.x = 450;
+    player.y = 350;
+    player.velocityX = 0;
+    player.velocityY = 0;
+    drawGame();
+}
+function gameLoop(time) {
+    if (!gameRunning) return;
+    const dt =
+        Math.min(
+            (time - lastTime) / 16.67,
+            2
+        );
+    lastTime = time;
+    updateGame(dt);
+    drawGame();
+    requestAnimationFrame(
+        gameLoop
+    );
+}
+/* =========================================================
+   PLAYER
+========================================================= */
+function updatePlayer(dt) {
+    player.velocityX = 0;
+    if (
+        keys["arrowleft"] ||
+        keys["a"]
+    ) {
+        player.velocityX =
+            -player.speed;
+    }
+    if (
+        keys["arrowright"] ||
+        keys["d"]
+    ) {
+        player.velocityX =
+            player.speed;
+    }
+    if (
+        (
+            keys["arrowup"] ||
+            keys["w"] ||
+            keys[" "]
+        ) &&
+        player.onGround
+    ) {
+        player.velocityY =
+            -player.jumpPower;
+        player.onGround = false;
+    }
+    player.velocityY +=
+        0.45 * dt;
+    player.x +=
+        player.velocityX * dt;
+    player.y +=
+        player.velocityY * dt;
+    if (
+        player.y + player.height >=
+        gameCanvas.height - 55
+    ) {
+        player.y =
+            gameCanvas.height - 55 -
+            player.height;
+        player.velocityY = 0;
+        player.onGround = true;
+    }
+    player.x =
+        Math.max(
+            0,
+            Math.min(
+                gameCanvas.width -
+                player.width,
+                player.x
+            )
+        );
+}
+/* =========================================================
+   RULE EXECUTION
+========================================================= */
+function updateObject(obj, dt) {
+    if (!obj.visible) return;
+    obj.animationTime += dt;
+    const asset =
+        obj.asset;
+    const distanceToPlayer =
+        distance(
+            obj,
+            player
+        );
+    for (
+        const rule of asset.rules
+    ) {
+        switch(rule.type) {
+            case "jumpNear":
+                if (
+                    distanceToPlayer <
+                    150 &&
+                    obj.velocityY === 0
+                ) {
+                    obj.velocityY =
+                        -8;
+                }
+                break;
+            case "follow":
+                if (
+                    distanceToPlayer <
+                    350
+                ) {
+                    obj.velocityX =
+                        player.x > obj.x
+                        ? 1.7
+                        : -1.7;
+                }
+                break;
+            case "chase":
+                if (
+                    distanceToPlayer <
+                    300
+                ) {
+                    obj.velocityX =
+                        player.x > obj.x
+                        ? 3
+                        : -3;
+                }
+                break;
+            case "patrol":
+                if (
+                    obj.x <=
+                    obj.patrolStart
+                ) {
+                    obj.direction = 1;
+                }
+                if (
+                    obj.x >=
+                    obj.patrolEnd
+                ) {
+                    obj.direction = -1;
+                }
+                obj.velocityX =
+                    1.5 *
+                    obj.direction;
+                break;
+            case "left":
+                obj.velocityX = -2;
+                break;
+            case "right":
+                obj.velocityX = 2;
+                break;
+            case "destroyTouch":
+                if (
+                    touching(
+                        obj,
+                        player
+                    )
+                ) {
+                    obj.visible = false;
+                }
+                break;
+            case "bounce":
+                if (
+                    obj.y +
+                    obj.height >=
+                    gameCanvas.height - 55
+                ) {
+                    obj.velocityY =
+                        -8;
+                }
+                break;
+            case "rotate":
+                obj.rotation +=
+                    0.04 * dt;
+                break;
+            case "grow":
+                if (
+                    distanceToPlayer <
+                    180
+                ) {
+                    obj.scale =
+                        Math.min(
+                            2,
+                            obj.scale +
+                            0.003 * dt
+                        );
+                }
+                break;
+            case "shrink":
+                if (
+                    distanceToPlayer <
+                    180
+                ) {
+                    obj.scale =
+                        Math.max(
+                            .3,
+                            obj.scale -
+                            0.003 * dt
+                        );
+                }
+                break;
+            case "explode":
+                if (
+                    touching(
+                        obj,
+                        player
+                    )
+                ) {
+                    obj.visible = false;
+                    createParticles(
+                        obj.x,
+                        obj.y
+                    );
+                }
+                break;
+            case "teleport":
+                if (
+                    distanceToPlayer <
+                    120 &&
+                    Math.random() < .01
+                ) {
+                    obj.x =
+                        100 +
+                        Math.random() *
+                        700;
+                    obj.y =
+                        100 +
+                        Math.random() *
+                        200;
+                }
+                break;
+            case "stop":
+                if (
+                    distanceToPlayer <
+                    100
+                ) {
+                    obj.velocityX = 0;
+                }
+                break;
+        }
+    }
+    /* PHYSICS */
+    obj.velocityY +=
+        0.45 * dt;
+    obj.x +=
+        obj.velocityX * dt;
+    obj.y +=
+        obj.velocityY * dt;
+    const ground =
+        gameCanvas.height - 55;
+    if (
+        obj.y + obj.height >=
+        ground
+    ) {
+        obj.y =
+            ground -
+            obj.height;
+        obj.velocityY = 0;
+    }
+    obj.x =
+        Math.max(
+            0,
+            Math.min(
+                gameCanvas.width -
+                obj.width,
+                obj.x
+            )
+        );
+}
+/* =========================================================
+   PARTICLES
+========================================================= */
+let particles = [];
+function createParticles(x, y) {
+    for (
+        let i = 0;
+        i < 25;
+        i++
+    ) {
+        particles.push({
+            x,
+            y,
+            vx:
+                (Math.random() - .5) *
+                8,
+            vy:
+                (Math.random() - .5) *
+                8,
+            life: 1
+        });
+    }
+}
+function updateParticles() {
+    particles.forEach(
+        p => {
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += .15;
+            p.life -= .025;
+        }
+    );
+    particles =
+        particles.filter(
+            p => p.life > 0
+        );
+}
+/* =========================================================
+   GAME UPDATE
+========================================================= */
+function updateGame(dt) {
+    updatePlayer(dt);
+    gameObjects.forEach(
+        obj =>
+            updateObject(
+                obj,
+                dt
+            )
+    );
+    updateParticles();
+}
+/* =========================================================
+   GAME DRAW
+========================================================= */
+function drawGame() {
+    gameCtx.clearRect(
+        0,
+        0,
+        gameCanvas.width,
+        gameCanvas.height
+    );
+    /* SKY */
+    const sky =
+        gameCtx.createLinearGradient(
+            0,
+            0,
+            0,
+            gameCanvas.height
+        );
+    sky.addColorStop(
+        0,
+        "#87cefa"
+    );
+    sky.addColorStop(
+        1,
+        "#dff6ff"
+    );
+    gameCtx.fillStyle =
+        sky;
+    gameCtx.fillRect(
+        0,
+        0,
+        gameCanvas.width,
+        gameCanvas.height
+    );
+    /* CLOUDS */
+    gameCtx.fillStyle =
+        "rgba(255,255,255,.75)";
+    for (
+        let i = 0;
+        i < 4;
+        i++
+    ) {
+        const x =
+            100 +
+            i * 220;
+        const y =
+            70 +
+            (i % 2) * 40;
+        gameCtx.beginPath();
+        gameCtx.arc(
+            x,
+            y,
+            22,
+            0,
+            Math.PI * 2
+        );
+        gameCtx.arc(
+            x + 25,
+            y - 8,
+            28,
+            0,
+            Math.PI * 2
+        );
+        gameCtx.arc(
+            x + 55,
+            y,
+            22,
+            0,
+            Math.PI * 2
+        );
+        gameCtx.fill();
+    }
+    /* GROUND */
+    gameCtx.fillStyle =
+        "#65a84f";
+    gameCtx.fillRect(
+        0,
+        gameCanvas.height - 55,
+        gameCanvas.width,
+        55
+    );
+    /* OBJECTS */
+    gameObjects.forEach(
+        drawObject
+    );
+    /* PLAYER */
+    drawPlayer();
+    /* PARTICLES */
+    particles.forEach(
+        p => {
+            gameCtx.globalAlpha =
+                p.life;
+            gameCtx.fillStyle =
+                "#ffb347";
+            gameCtx.fillRect(
+                p.x,
+                p.y,
+                7,
+                7
+            );
+        }
+    );
+    gameCtx.globalAlpha = 1;
+    /* CONTROLS */
+    gameCtx.fillStyle =
+        "rgba(0,0,0,.35)";
+    gameCtx.fillRect(
+        15,
+        15,
+        190,
+        38
+    );
+    gameCtx.fillStyle =
+        "white";
+    gameCtx.font =
+        "14px Arial";
+    gameCtx.fillText(
+        "WASD / Arrow Keys to move",
+        27,
+        39
+    );
+}
+function drawPlayer() {
+    gameCtx.fillStyle =
+        "#5965ff";
+    gameCtx.fillRect(
+        player.x,
+        player.y,
+        player.width,
+        player.height
+    );
+    gameCtx.fillStyle =
+        "white";
+    gameCtx.fillRect(
+        player.x + 7,
+        player.y + 9,
+        7,
+        7
+    );
+    gameCtx.fillRect(
+        player.x + 22,
+        player.y + 9,
+        7,
+        7
+    );
+}
+function drawObject(obj) {
+    if (!obj.visible) return;
+    const asset =
+        obj.asset;
+    const cx =
+        obj.x +
+        obj.width / 2;
+    const cy =
+        obj.y +
+        obj.height / 2;
+    gameCtx.save();
+    gameCtx.translate(
+        cx,
+        cy
+    );
+    gameCtx.rotate(
+        obj.rotation
+    );
+    gameCtx.scale(
+        obj.scale,
+        obj.scale
+    );
+    if (asset.texture) {
+        if (!obj.image) {
+            obj.image =
+                new Image();
+            obj.image.src =
+                asset.texture;
+        }
+        if (
+            obj.image.complete
+        ) {
+            gameCtx.drawImage(
+                obj.image,
+                -obj.width / 2,
+                -obj.height / 2,
+                obj.width,
+                obj.height
+            );
+        }
+    } else {
+        /*
+           Default generated placeholder.
+        */
+        gameCtx.fillStyle =
+            "#252b38";
+        gameCtx.beginPath();
+        gameCtx.roundRect(
+            -obj.width / 2,
+            -obj.height / 2,
+            obj.width,
+            obj.height,
+            12
+        );
+        gameCtx.fill();
+        gameCtx.fillStyle =
+            "white";
+        gameCtx.font =
+            "10px Arial";
+        gameCtx.textAlign =
+            "center";
+        gameCtx.fillText(
+            asset.name.substring(
+                0,
+                9
+            ),
+            0,
+            4
+        );
+    }
+    gameCtx.restore();
+}
+/* =========================================================
+   COLLISION HELPERS
+========================================================= */
+function distance(a, b) {
+    const ax =
+        a.x +
+        a.width / 2;
+    const ay =
+        a.y +
+        a.height / 2;
+    const bx =
+        b.x +
+        b.width / 2;
+    const by =
+        b.y +
+        b.height / 2;
+    return Math.hypot(
+        ax - bx,
+        ay - by
+    );
+}
+function touching(a, b) {
+    return (
+        a.x <
+        b.x + b.width &&
+        a.x + a.width >
+        b.x &&
+        a.y <
+        b.y + b.height &&
+        a.y + a.height >
+        b.y
+    );
+}
+/* =========================================================
+   EDITOR MODES
+========================================================= */
+function showPaint() {
+    document.getElementById(
+        "paintMode"
+    ).style.display =
+        "flex";
+    document.getElementById(
+        "gameMode"
+    ).style.display =
+        "none";
+    document.getElementById(
+        "paintTab"
+    ).classList.add("active");
+    document.getElementById(
+        "gameTab"
+    ).classList.remove("active");
+}
+function showGame() {
+    document.getElementById(
+        "paintMode"
+    ).style.display =
+        "none";
+    document.getElementById(
+        "gameMode"
+    ).style.display =
+        "flex";
+    document.getElementById(
+        "paintTab"
+    ).classList.remove("active");
+    document.getElementById(
+        "gameTab"
+    ).classList.add("active");
+    drawGame();
+}
+function toggleGame() {
+    showGame();
+    if (gameRunning) {
+        stopGame();
+    } else {
+        startGame();
+    }
+}
+/* =========================================================
+   SAVE / EXPORT
+========================================================= */
+function saveProject() {
+    saveCurrentTexture();
+    localStorage.setItem(
+        "textureforge-project-v020",
+        JSON.stringify(
+            assets
+        )
+    );
+    setStatus(
+        "Project saved"
+    );
+}
 function exportProject() {
-
-    saveCanvasToAsset();
-
+    saveCurrentTexture();
     const project = {
-
         engine:
             "TextureForge AI",
-
         version:
-            "0.1.0",
-
+            "0.2.0",
         assets
-
     };
-
     const blob =
         new Blob(
             [
@@ -1526,74 +2051,88 @@ function exportProject() {
                     "application/json"
             }
         );
-
     const url =
         URL.createObjectURL(
             blob
         );
-
-    const link =
+    const a =
         document.createElement(
             "a"
         );
-
-    link.href = url;
-
-    link.download =
-        "textureforge-project.json";
-
-    link.click();
-
+    a.href = url;
+    a.download =
+        "textureforge-game.json";
+    a.click();
     URL.revokeObjectURL(url);
-
     setStatus(
-        "Project exported"
+        "Game exported"
     );
-
 }
-
-
 /* =========================================================
-   UI HELPERS
-   ========================================================= */
-
-function setStatus(message) {
-
+   HELPERS
+========================================================= */
+function showAI(text) {
+    document.getElementById(
+        "aiResult"
+    ).textContent =
+        text;
+}
+function setStatus(text) {
     document.getElementById(
         "status"
-    ).textContent = message;
-
+    ).textContent =
+        text;
 }
-
-
-function setAIOutput(message) {
-
-    document.getElementById(
-        "aiOutput"
-    ).textContent = message;
-
-}
-
-
 function escapeHTML(text) {
-
     return String(text)
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
-
 }
-
-
 /* =========================================================
-   START
-   ========================================================= */
-
+   INITIAL PROJECT
+========================================================= */
+function initialize() {
+    const saved =
+        localStorage.getItem(
+            "textureforge-project-v020"
+        );
+    if (saved) {
+        try {
+            assets =
+                JSON.parse(saved);
+        } catch {
+            assets = [];
+        }
+    }
+    if (!assets.length) {
+        assets = [
+            {
+                name:
+                    "Penguin",
+                texture:
+                    null,
+                rules: [],
+                properties: {
+                    health: 100,
+                    speed: 2,
+                    jumpPower: 8,
+                    gravity: true,
+                    solid: true
+                }
+            }
+        ];
+    }
+    selectedAsset = 0;
+    blankTexture();
+    loadTexture();
+    renderAssets();
+    renderRules();
+    drawGame();
+}
 initialize();
-
 </script>
-
 </body>
 </html>
